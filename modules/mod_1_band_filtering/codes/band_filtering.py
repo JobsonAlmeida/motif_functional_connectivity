@@ -32,6 +32,8 @@ bands = [
 for subject in subjects:
     for session in sessions:
 
+        """___Abrindo o aquivo a ser processado___"""
+
         file_path = os.path.join(
             base_path,
             subject,
@@ -53,6 +55,8 @@ for subject in subjects:
         if not os.path.exists(events_path):
             print(f"Arquivo não encontrado: {events_path}")
             continue
+
+        """___Processando os dados___"""
 
         print(f"\nProcessando {subject} {session}...")
         epochs = mne.read_epochs(file_path, preload=True, verbose=False)
@@ -80,6 +84,9 @@ for subject in subjects:
 
         X_bands = np.stack(band_arrays, axis=1) #(época × bandas × canais × tempo)
 
+
+        """___Salvando os dados processados__"""
+        
         save_path = os.path.join(
             output_path,
             f"{subject}_{session}_inner_bands.npy"

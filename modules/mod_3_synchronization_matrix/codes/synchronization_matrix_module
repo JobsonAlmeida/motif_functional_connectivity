@@ -42,17 +42,7 @@ for subject in subjects:
     print(f"Salvo em: {save_path}")
 
 
-
-
-
-
-
-    
-
-
-
-
-    
+   
 
 for subject in subjects:
     for session in sessions:
@@ -70,7 +60,7 @@ for subject in subjects:
 
         X_bands = np.load(file_path) #(época × bandas × canais × tempo)
 
-        X_bands_motifs = motif_sequences_all(X_bands)
+        X_bands_motifs = obtain_matrices(X_bands)
 
         save_path = os.path.join(
             output_path,
