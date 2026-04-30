@@ -15,7 +15,7 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-def obtain_synchronization_matrix(array: np.ndarray) -> np.ndarray:
+def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
     """
     array: (n_epochs, n_bands, n_channels, n_motifs)
 
@@ -41,12 +41,18 @@ def obtain_synchronization_matrix(array: np.ndarray) -> np.ndarray:
         else:
             seq1 = array[..., :-lag]
             seq2 = array[..., lag:]
-            
-        matches = seq1[:, :, :, None, :] == seq2[:, :, None, :, :]
 
-        sync = matches.mean(axis=-1)
+        # Obtendo matches channel a channel   
+        # A última dimensão tem True e False para cada motif comparado 
+        matches = seq1[:, :, :, None, :] == seq2[:, :, None, :, :]  # matches.shape = (n_epochs, n_bands, n_channels, n_channels, n_motifs) 
 
-        sync_matrices[:, :, lag, :, :] = sync
+        # Calcula a soma (contagem de acertos)
+        sync = matches.sum(axis=-1) #sync.shape = (n_epochs, n_bands, n_channels, n_channels)
+
+        # Normaliza pelo valor máximo presente em cada matriz
+        sync = (sync - sync.min()) / (sync.max() - sync.min())
+
+        sync_matrices[:, :, lag, :, :] = sync #sync.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
 
     return sync_matrices
 
@@ -72,7 +78,7 @@ for subject in subjects:
 
         array_bands_motifs = np.load(file_path) #(épocas × bandas × canais × motifs)
        
-        sync_matrices = obtain_synchronization_matrix(array_bands_motifs)
+        sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
 
         """___Salvando os dados processados__"""
 
