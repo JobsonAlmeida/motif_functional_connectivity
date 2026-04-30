@@ -20,7 +20,7 @@ def obtain_motif_sequences(x_bands: np.ndarray) -> np.ndarray:
     if x_bands.ndim != 4:
         raise ValueError("x_bands deve ter 4 dimensões")
 
-    windows = sliding_window_view(x_bands, window_shape=3, axis=-1) #windows.shape = (n_trials, n_bands, n_channels, n_times-2, 3)
+    windows = sliding_window_view(x_bands, window_shape=3, axis=-1) #windows.shape = (n_trials, n_bands, n_channels, n_motifs (n_times-2), 3)
 
     orders = np.argsort(windows, axis=-1, kind="mergesort") #orders.shape = (n_trials, n_bands, n_channels, n_motifs, 3)
 
