@@ -5,10 +5,10 @@ from numpy.lib.stride_tricks import sliding_window_view
 
 
 current_file = Path(__file__).resolve()
-project_root = current_file.parents[3]
+project_root = current_file.parents[2]
 
-base_path = project_root / "processed_data" / "mod_2_motif_sequence"
-output_path = project_root / "processed_data" / "mod_3_synchronization_matrix"
+base_path = project_root / "processed_data" / "stage_30_motif_sequence"
+output_path = project_root / "processed_data" / current_file.parents[0].name
 
 os.makedirs(output_path, exist_ok=True)
 
