@@ -1,0 +1,6 @@
+*** Exemplo para implementar futuramente***
+
+timestamp,stage,subject,session,time_seconds
+2026-05-01 09:10:24,stage_20_band_filtering,sub-01,ses-01,12.41
+2026-05-01 09:10:44,stage_30_motif_sequence,sub-01,ses-01,19.18
+2026-05-01 09:11:01,stage_40_synchronization_matrix,sub-01,ses-01,16.92

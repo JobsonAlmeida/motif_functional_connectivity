@@ -1,0 +1,19 @@
+****Exemplo para implementar futuramente****
+
+
+[2026-05-01 09:10:11] INFO  Starting pipeline
+
+[2026-05-01 09:10:12] INFO  Starting stage_20_band_filtering
+[2026-05-01 09:10:12] INFO  Subject: sub-01 | Session: ses-01
+[2026-05-01 09:10:24] INFO  Band filtering completed successfully
+[2026-05-01 09:10:24] INFO  Execution time: 12.41 seconds
+
+[2026-05-01 09:10:25] INFO  Starting stage_30_motif_sequence
+[2026-05-01 09:10:25] INFO  Subject: sub-01 | Session: ses-01
+[2026-05-01 09:10:44] INFO  Motif extraction completed successfully
+[2026-05-01 09:10:44] INFO  Execution time: 19.18 seconds
+
+[2026-05-01 09:10:45] ERROR Missing file:
+thinking_outloud_dataset/sub-03/ses-02/eeg.fif
+
+[2026-05-01 09:10:46] INFO  Pipeline finished
