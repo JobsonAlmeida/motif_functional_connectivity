@@ -8,6 +8,6 @@ thinking_outloud_dataset/*
 # =========================
 # Processed data
 # =========================
-processed_data/
+processed_data/*
 
 
