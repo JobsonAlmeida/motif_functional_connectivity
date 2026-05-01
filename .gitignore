@@ -1,3 +1,17 @@
-dataset_Thinking_outloud/
-Miniconda3-latest-Linux-x86_64.sh
+# =========================
+# Dataset directory
+# =========================
+thinking_outloud_dataset/*
+!thinking_outloud_dataset/README.md
+
+
+# =========================
+# Processed data
+# =========================
 processed_data/
+
+
+# =========================
+# Conda installer
+# =========================
+Miniconda3-latest-Linux-x86_64.sh

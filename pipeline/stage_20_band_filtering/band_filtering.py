@@ -5,29 +5,57 @@ import pickle
 from pathlib import Path
 
 current_file = Path(__file__).resolve()
-project_root = current_file.parents[3]
+project_root = current_file.parents[2]
 
-base_path = project_root / "dataset_Thinking_outloud" / "derivatives"
-output_path = project_root / "processed_data" / "mod_1_band_filtering"
+base_path = project_root / "thinking_outloud_dataset" / "derivatives"
+output_path = project_root / "processed_data" / current_file.parents[0].name
 
 os.makedirs(output_path, exist_ok=True)
 
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-bands = [
-    (12, 15),
-    (15, 18),
-    (18, 21),
-    (21, 24),
-    (24, 27),
-    (27, 30),
-    (30, 33),
-    (33, 36),
-    (36, 39),
-    (39, 42),
-    (42, 45),
-]
+
+def obtain_filtered_bands(x_bands: np.ndarray) -> np.ndarray:
+
+    bands = [
+        (12, 15),
+        (15, 18),
+        (18, 21),
+        (21, 24),
+        (24, 27),
+        (27, 30),
+        (30, 33),
+        (33, 36),
+        (36, 39),
+        (39, 42),
+        (42, 45),
+    ]
+
+    with open(events_path, "rb") as f:
+            events = pickle.load(f)
+
+    mask_inner = events[:, 2] == 1
+    epochs_inner = epochs[mask_inner]
+
+    band_arrays = []
+
+    for l_freq, h_freq in bands:
+        epochs_band = epochs_inner.copy().filter(
+            l_freq=l_freq,
+            h_freq=h_freq,
+            picks="eeg",
+            method="fir",
+            phase="zero",
+            fir_design="firwin",
+            verbose=False
+        )
+
+        band_arrays.append(epochs_band.get_data())  # [ banda1, banda2, banda3 ] com cada banda no formato (épocas × canais × tempo)
+
+    X_bands = np.stack(band_arrays, axis=1) #(época × bandas × canais × tempo)
+    
+    return X_bands
 
 for subject in subjects:
     for session in sessions:
@@ -61,30 +89,8 @@ for subject in subjects:
         print(f"\nProcessando {subject} {session}...")
         epochs = mne.read_epochs(file_path, preload=True, verbose=False)
 
-        with open(events_path, "rb") as f:
-            events = pickle.load(f)
-
-        mask_inner = events[:, 2] == 1
-        epochs_inner = epochs[mask_inner]
-
-        band_arrays = []
-
-        for l_freq, h_freq in bands:
-            epochs_band = epochs_inner.copy().filter(
-                l_freq=l_freq,
-                h_freq=h_freq,
-                picks="eeg",
-                method="fir",
-                phase="zero",
-                fir_design="firwin",
-                verbose=False
-            )
-
-            band_arrays.append(epochs_band.get_data())  # [ banda1, banda2, banda3 ] com cada banda no formato (épocas × canais × tempo)
-
-        X_bands = np.stack(band_arrays, axis=1) #(época × bandas × canais × tempo)
-
-
+        X_bands = obtain_filtered_bands(epochs)
+    
         """___Salvando os dados processados__"""
         
         save_path = os.path.join(
