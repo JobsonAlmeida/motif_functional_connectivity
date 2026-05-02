@@ -16,7 +16,7 @@ subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
-def obtain_filtered_bands(x_bands: np.ndarray) -> np.ndarray:
+def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.ndarray:
 
     bands = [
         (12, 15),
@@ -57,48 +57,57 @@ def obtain_filtered_bands(x_bands: np.ndarray) -> np.ndarray:
     
     return X_bands
 
-for subject in subjects:
-    for session in sessions:
+def run_band_filtering(): 
 
-        """___Abrindo o aquivo a ser processado___"""
+    for subject in subjects:
+        for session in sessions:
 
-        file_path = os.path.join(
-            base_path,
-            subject,
-            session,
-            f"{subject}_{session}_eeg-epo.fif"
-        )
+            """___Abrindo o aquivo a ser processado___"""
 
-        events_path = os.path.join(
-            base_path,
-            subject,
-            session,
-            f"{subject}_{session}_events.dat"
-        )
+            file_path = os.path.join(
+                base_path,
+                subject,
+                session,
+                f"{subject}_{session}_eeg-epo.fif"
+            )
 
-        if not os.path.exists(file_path):
-            print(f"Arquivo não encontrado: {file_path}")
-            continue
+            events_path = os.path.join(
+                base_path,
+                subject,
+                session,
+                f"{subject}_{session}_events.dat"
+            )
 
-        if not os.path.exists(events_path):
-            print(f"Arquivo não encontrado: {events_path}")
-            continue
+            if not os.path.exists(file_path):
+                print(f"Arquivo não encontrado: {file_path}")
+                continue
 
-        """___Processando os dados___"""
+            if not os.path.exists(events_path):
+                print(f"Arquivo não encontrado: {events_path}")
+                continue
 
-        print(f"\nProcessando {subject} {session}...")
-        epochs = mne.read_epochs(file_path, preload=True, verbose=False)
+            """___Processando os dados___"""
 
-        X_bands = obtain_filtered_bands(epochs)
-    
-        """___Salvando os dados processados__"""
+            print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
+            epochs = mne.read_epochs(file_path, preload=True, verbose=False)
+
+            X_bands = obtain_filtered_bands(epochs, events_path)
         
-        save_path = os.path.join(
-            output_path,
-            f"{subject}_{session}_inner_bands.npy"
-        )
+            """___Salvando os dados processados__"""
+            
+            save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_inner_bands.npy"
+            )
 
-        np.save(save_path, X_bands)
+            np.save(save_path, X_bands)
 
-        print(f"Salvo em: {save_path}")
-        print(f"Shape: {X_bands.shape}")
+            print(f"Salvo em: {save_path}")
+            print(f"Shape: {X_bands.shape}")
+
+    print(f"\nFinalizado {current_file.parents[0].name}.")
+
+
+if __name__ == "__main__":
+
+    run_band_filtering()

@@ -57,37 +57,42 @@ def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
     return sync_matrices
 
 
+def run_synchronization_matrix():
+        
+    for subject in subjects:
+        for session in sessions:
 
-for subject in subjects:
-    for session in sessions:
+            """___Abrindo o aquivo a ser processado___"""
 
-        """___Abrindo o aquivo a ser processado___"""
+            file_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_inner_bands_motifs.npy"
+            )
 
-        file_path = os.path.join(
-            base_path,
-            f"{subject}_{session}_inner_bands_motifs.npy"
-        )
+            if not os.path.exists(file_path):
+                print(f"Arquivo não encontrado: {file_path}")
+                continue
 
-        if not os.path.exists(file_path):
-            print(f"Arquivo não encontrado: {file_path}")
-            continue
+            """___Processando os dados___"""
 
-        """___Processando os dados___"""
+            print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
-        print(f"\nProcessando {subject} {session}...")
+            array_bands_motifs = np.load(file_path) #(épocas × bandas × canais × motifs)
+        
+            sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
 
-        array_bands_motifs = np.load(file_path) #(épocas × bandas × canais × motifs)
-       
-        sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
+            """___Salvando os dados processados__"""
 
-        """___Salvando os dados processados__"""
+            save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_sync_matrices.npy"
+            )
 
-        save_path = os.path.join(
-            output_path,
-            f"{subject}_{session}_sync_matrices.npy"
-        )
+            np.save(save_path, sync_matrices)
 
-        np.save(save_path, sync_matrices)
+            print(f"Salvo em: {save_path}")
+            print(f"Shape: {sync_matrices.shape}")
 
-        print(f"Salvo em: {save_path}")
-        print(f"Shape: {sync_matrices.shape}")
+if __name__ == "__main__":
+
+    run_synchronization_matrix()

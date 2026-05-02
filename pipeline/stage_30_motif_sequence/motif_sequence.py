@@ -48,37 +48,42 @@ def obtain_motif_sequences(x_bands: np.ndarray) -> np.ndarray:
 
     return x_bands_motifs
 
+def run_motif_sequence(): 
 
-for subject in subjects:
-    for session in sessions:
+    for subject in subjects:
+        for session in sessions:
 
-        """___Abrindo o aquivo a ser processado___"""
+            """___Abrindo o aquivo a ser processado___"""
 
-        file_path = os.path.join(
-            base_path,
-            f"{subject}_{session}_inner_bands.npy"
-        )
+            file_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_inner_bands.npy"
+            )
 
-        if not os.path.exists(file_path):
-            print(f"Arquivo não encontrado: {file_path}")
-            continue
+            if not os.path.exists(file_path):
+                print(f"Arquivo não encontrado: {file_path}")
+                continue
 
-        print(f"\nProcessando {subject} {session}...")
+            print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
-        X_bands = np.load(file_path) #(épocas × bandas × canais × tempo)
+            X_bands = np.load(file_path) #(épocas × bandas × canais × tempo)
 
-        """___Processando os dados através___"""
-       
-        X_bands_motifs = obtain_motif_sequences(X_bands)
+            """___Processando os dados através___"""
+        
+            X_bands_motifs = obtain_motif_sequences(X_bands)
 
-        """___Salvando os dados processados__"""
+            """___Salvando os dados processados__"""
 
-        save_path = os.path.join(
-            output_path,
-            f"{subject}_{session}_inner_bands_motifs.npy"
-        )
+            save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_inner_bands_motifs.npy"
+            )
 
-        np.save(save_path, X_bands_motifs)
+            np.save(save_path, X_bands_motifs)
 
-        print(f"Salvo em: {save_path}")
-        print(f"Shape: {X_bands_motifs.shape}")
+            print(f"Salvo em: {save_path}")
+            print(f"Shape: {X_bands_motifs.shape}")
+
+if __name__ == "__main__":
+
+    run_motif_sequence()

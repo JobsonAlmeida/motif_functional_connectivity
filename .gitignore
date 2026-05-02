@@ -3,6 +3,7 @@
 # =========================
 thinking_outloud_dataset/*
 !thinking_outloud_dataset/README.md
+!image_folder_structure.png
 
 
 # =========================
@@ -15,3 +16,9 @@ processed_data/*
 # VS Code 
 # =========================
 .vscode
+
+
+# =========================
+# Python
+# =========================
+__pycache__/

@@ -3,7 +3,7 @@
 Download the dataset from:
 https://openneuro.org/datasets/ds003626
 
-After downloading the dataset, copy the downloaded folders into the `thinking_outloud_dataset` directory so that the following structure is created:
+After downloading the dataset, copy the folders into the `thinking_outloud_dataset` directory so that the following structure is created:
 
 ```text
 thinking_outloud_dataset/
@@ -21,6 +21,6 @@ thinking_outloud_dataset/
 └── README.md
 ```
 
-Image:
+Image showing the directory structure:
 
-![Dataset structure](image.png)
+![Dataset structure](directory_structure.png)
