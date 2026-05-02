@@ -11,3 +11,7 @@ thinking_outloud_dataset/*
 processed_data/*
 !processed_data/README.md
 
+# =========================
+# VS Code 
+# =========================
+.vscode
