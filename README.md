@@ -13,6 +13,6 @@ conda env create -f environment.yml
 Activate the environment:
 
 ```bash id="yjlwm6"
-conda activate motif_pipeline
+conda activate motif_env
 ```
 
