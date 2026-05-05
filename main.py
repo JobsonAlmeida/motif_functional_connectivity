@@ -5,8 +5,8 @@ from pipeline.stage_40_synchronization_matrix.synchronization_matrix import run_
 def main():
 
     #run_band_filtering()
-    #run_motif_sequence()
-    run_synchronization_matrix()
+    run_motif_sequence()
+    #run_synchronization_matrix()
 
 if __name__ == "__main__":
     main()
