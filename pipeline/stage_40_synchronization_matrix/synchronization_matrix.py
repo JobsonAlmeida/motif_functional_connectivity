@@ -52,7 +52,7 @@ def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
         # Normaliza pelo valor máximo presente em cada matriz
         sync = (sync - sync.min()) / (sync.max() - sync.min())
 
-        sync_matrices[:, :, lag, :, :] = sync #sync_matrices.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
+        sync_matrices[:, :, lag, :, :] = sync #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
 
     return sync_matrices
 
@@ -79,7 +79,7 @@ def run_synchronization_matrix():
 
             array_bands_motifs = np.load(file_path) #(épocas × bandas × canais × motifs)
         
-            sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
+            sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
 
             """___Salvando os dados processados__"""
 
