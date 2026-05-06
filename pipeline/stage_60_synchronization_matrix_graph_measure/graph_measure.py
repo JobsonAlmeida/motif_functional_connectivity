@@ -4,7 +4,6 @@ from pathlib import Path
 from numpy.lib.stride_tricks import sliding_window_view
 import networkx as nx
 
-
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
@@ -71,8 +70,7 @@ def obtain_graph_measures(sync_matrices: np.ndarray) -> np.ndarray:
 
     return graph_measures 
 
-
-def run_graph_measure():
+def run_synchronization_matrix_graph_measure():
         
     for subject in subjects:
         for session in sessions:
@@ -110,4 +108,4 @@ def run_graph_measure():
 
 if __name__ == "__main__":
 
-    run_graph_measure()
+    run_synchronization_matrix_graph_measure()
