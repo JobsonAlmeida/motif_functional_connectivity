@@ -15,7 +15,6 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-
 def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.ndarray:
 
     bands = [
@@ -37,6 +36,7 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
 
     mask_inner = events[:, 2] == 1
     epochs_inner = epochs[mask_inner]
+    labels = events[mask_inner, 1]
 
     band_arrays = []
 
@@ -55,7 +55,7 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
 
     X_bands = np.stack(band_arrays, axis=1) #(época × bandas × canais × tempo)
     
-    return X_bands
+    return X_bands, labels
 
 def run_band_filtering(): 
 
@@ -91,7 +91,7 @@ def run_band_filtering():
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
             epochs = mne.read_epochs(file_path, preload=True, verbose=False)
 
-            X_bands = obtain_filtered_bands(epochs, events_path)
+            X_bands, labels = obtain_filtered_bands(epochs, events_path)
         
             """___Salvando os dados processados__"""
             
@@ -100,10 +100,18 @@ def run_band_filtering():
                 f"{subject}_{session}_inner_bands.npy"
             )
 
+            labels_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_inner_bands_labels.npy"
+)
+
             np.save(save_path, X_bands)
+            np.save(labels_path, labels)
 
             print(f"Salvo em: {save_path}")
-            print(f"Shape: {X_bands.shape}")
+            print(f"x_bands.shape: {X_bands.shape}")
+            print(f"labels.shape: {labels.shape}")
+
 
     print(f"\nFinalizado {current_file.parents[0].name}.")
 
