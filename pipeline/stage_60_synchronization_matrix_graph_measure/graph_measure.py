@@ -64,7 +64,7 @@ def obtain_graph_measures(sync_matrices: np.ndarray) -> np.ndarray:
                     [pr_dict[ch] for ch in range(n_channels)]
                 )
 
-                print(graph_measures[epoch, band, lag])
+                #print(graph_measures[epoch, band, lag])
 
     graph_measures[:, :, :, :, 1] = graph_measures[:, :, :, :, 1]*100
 
@@ -82,8 +82,17 @@ def run_synchronization_matrix_graph_measure():
                 f"{subject}_{session}_sync_matrices.npy"
             )
 
+            labels_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_sync_matrices_labels.npy"
+            )
+
             if not os.path.exists(file_path):
                 print(f"Arquivo não encontrado: {file_path}")
+                continue
+
+            if not os.path.exists(labels_path):
+                print(f"Rótulos não encontrado: {labels_path}")
                 continue
 
             """___Processando os dados___"""
@@ -91,6 +100,13 @@ def run_synchronization_matrix_graph_measure():
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
             sync_matrices = np.load(file_path)  #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
+            labels = np.load(labels_path)
+
+            if labels.shape[0] != sync_matrices.shape[0]:
+                raise ValueError(
+                    f"Número de rótulos diferente do número de épocas: "
+                    f"{labels.shape[0]} rótulos vs {sync_matrices.shape[0]} épocas"
+                )
         
             graph_measures = obtain_graph_measures(sync_matrices) #graph_measures.shape = (n_epochs, n_bands, n_lags, n_channels, 2)
 
@@ -101,10 +117,22 @@ def run_synchronization_matrix_graph_measure():
                 f"{subject}_{session}_graph_measures.npy"
             )
 
-            np.save(save_path, graph_measures)
+            labels_save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_graph_measures_labels.npy"
+            )
 
-            print(f"Salvo em: {save_path}")
-            print(f"Shape: {graph_measures.shape}")
+
+            np.save(save_path, graph_measures)
+            np.save(labels_save_path, labels)
+
+            "___ imprimindo na tela___"
+
+            print(f"Dados salvos em: {save_path}")
+            print(f"Rótulos salvos em: {labels_save_path}")
+
+            print(f"Shape dos dados: {graph_measures.shape}")
+            print(f"Shape dos rótulos: {labels.shape}") 
 
 if __name__ == "__main__":
 
