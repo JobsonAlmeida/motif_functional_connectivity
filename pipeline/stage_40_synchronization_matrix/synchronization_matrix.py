@@ -52,7 +52,7 @@ def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
         # Normaliza pelo valor máximo presente em cada matriz
         sync = (sync - sync.min()) / (sync.max() - sync.min())
 
-        sync_matrices[:, :, lag, :, :] = sync #sync.shape = (n_epochs, n_bands, lag, n_channels, n_channels)
+        sync_matrices[:, :, lag, :, :] = sync #sync.shape = (n_epochs, n_bands, lag, n_channels, n_channels, motifs)
 
     return sync_matrices
 
