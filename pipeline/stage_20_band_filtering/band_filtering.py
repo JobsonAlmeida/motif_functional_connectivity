@@ -108,9 +108,12 @@ def run_band_filtering():
             np.save(save_path, X_bands)
             np.save(labels_path, labels)
 
-            print(f"Salvo em: {save_path}")
-            print(f"x_bands.shape: {X_bands.shape}")
-            print(f"labels.shape: {labels.shape}")
+            print(f"Dados salvos em: {save_path}")
+            print(f"Rótulos salvos em: {labels_path}")
+
+
+            print(f"Shape dos dados: {X_bands.shape}")
+            print(f"Shape dos rótulos: {labels.shape}")
 
 
     print(f"\nFinalizado {current_file.parents[0].name}.")

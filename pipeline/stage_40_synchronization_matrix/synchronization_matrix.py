@@ -69,17 +69,35 @@ def run_synchronization_matrix():
                 f"{subject}_{session}_inner_bands_motifs.npy"
             )
 
+            labels_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_inner_bands_motifs_labels.npy"
+            )
+
             if not os.path.exists(file_path):
                 print(f"Arquivo não encontrado: {file_path}")
                 continue
+
+            if not os.path.exists(labels_path):
+                print(f"Arquivo não encontrado: {file_path}")
+                continue
+
 
             """___Processando os dados___"""
 
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
             array_bands_motifs = np.load(file_path) #(épocas × bandas × canais × motifs)
+            labels = np.load(labels_path)
         
             sync_matrices = obtain_synchronization_matrices(array_bands_motifs) #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
+
+            if labels.shape[0] != array_bands_motifs.shape[0]:
+                raise ValueError(
+                    f"Número de rótulos diferente do número de épocas: "
+                    f"{labels.shape[0]} rótulos vs {array_bands_motifs.shape[0]} épocas"
+                )
+
 
             """___Salvando os dados processados__"""
 
@@ -88,10 +106,21 @@ def run_synchronization_matrix():
                 f"{subject}_{session}_sync_matrices.npy"
             )
 
-            np.save(save_path, sync_matrices)
+            labels_save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_sync_matrices_labels.npy"
+            )
 
-            print(f"Salvo em: {save_path}")
-            print(f"Shape: {sync_matrices.shape}")
+            np.save(save_path, sync_matrices)
+            np.save(labels_save_path, labels)
+
+            "___ imprimindo na tela___"
+
+            print(f"Dados salvos em: {save_path}")
+            print(f"Rótulos salvos em: {labels_save_path}")
+
+            print(f"Shape dos dados: {sync_matrices.shape}")
+            print(f"Shape dos rótulos: {labels.shape}")           
 
 if __name__ == "__main__":
 

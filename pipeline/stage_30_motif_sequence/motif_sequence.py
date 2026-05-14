@@ -39,12 +39,12 @@ def obtain_motif_sequences(x_bands: np.ndarray) -> np.ndarray:
         mask = np.all(orders == order_tuple, axis=-1)
         x_bands_motifs[mask] = motif_id
 
-    all_equal = (
-        (windows[..., 0] == windows[..., 1]) & #windows[:, :, :, :, 0] == windows[:, :, :, :, 1]
-        (windows[..., 0] == windows[..., 2])
-    )
+    # all_equal = (
+    #     (windows[..., 0] == windows[..., 1]) & #windows[:, :, :, :, 0] == windows[:, :, :, :, 1]
+    #     (windows[..., 0] == windows[..., 2])
+    # )
 
-    x_bands_motifs[all_equal] = 6
+    # x_bands_motifs[all_equal] = 6
 
     return x_bands_motifs
 
@@ -60,17 +60,34 @@ def run_motif_sequence():
                 f"{subject}_{session}_inner_bands.npy"
             )
 
+            labels_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_inner_bands_labels.npy"
+            )
+            
             if not os.path.exists(file_path):
                 print(f"Arquivo não encontrado: {file_path}")
+                continue
+
+            if not os.path.exists(labels_path):
+                print(f"Rótulos não encontrados: {labels_path}")
                 continue
 
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
             X_bands = np.load(file_path) #(épocas × bandas × canais × tempo)
+            labels = np.load(labels_path)
 
-            """___Processando os dados através___"""
+
+            """___Processando os dados___"""
         
             X_bands_motifs = obtain_motif_sequences(X_bands)
+
+            if X_bands_motifs.shape[0] != labels.shape[0]:
+                raise ValueError(
+                    f"Número de épocas diferente dos rótulos: "
+                    f"{X_bands_motifs.shape[0]} épocas, {labels.shape[0]} rótulos"
+                )
 
             """___Salvando os dados processados__"""
 
@@ -79,10 +96,21 @@ def run_motif_sequence():
                 f"{subject}_{session}_inner_bands_motifs.npy"
             )
 
-            np.save(save_path, X_bands_motifs)
+            labels_save_path = os.path.join(
+                output_path,
+                f"{subject}_{session}_inner_bands_motifs_labels.npy"
+            )
 
-            print(f"Salvo em: {save_path}")
-            print(f"Shape: {X_bands_motifs.shape}")
+            np.save(save_path, X_bands_motifs)
+            np.save(labels_save_path, labels)
+
+
+            print(f"Dados salvos em: {save_path}")
+            print(f"Rótulos salvos em: {labels_save_path}")
+
+            print(f"Shape dos dados: {X_bands_motifs.shape}")
+            print(f"Shape dos rótulos: {labels.shape}")
+
 
 if __name__ == "__main__":
 
