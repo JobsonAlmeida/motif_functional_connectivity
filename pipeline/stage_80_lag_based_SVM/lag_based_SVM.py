@@ -4,6 +4,14 @@ from pathlib import Path
 from numpy.lib.stride_tricks import sliding_window_view
 import networkx as nx
 
+from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+import pickle
+
+
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
@@ -16,14 +24,15 @@ subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 def run_lag_based_SVM():
-        
-    data_by_subject_and_lag = {}
+
+    results = {}
 
     for subject in subjects:
-        
-        for session in sessions:
 
-            session_arrays = []
+        graph_sessions = []
+        label_sessions = []
+
+        for session in sessions:
 
             """___Abrindo o aquivo a ser processado___"""
 
@@ -32,48 +41,89 @@ def run_lag_based_SVM():
                 f"{subject}_{session}_graph_measures.npy"
             )
 
+            labels_path = os.path.join(
+                base_path,
+                f"{subject}_{session}_graph_measures_labels.npy"
+            )
+
             if not os.path.exists(file_path):
                 print(f"Arquivo não encontrado: {file_path}")
                 continue
 
+            if not os.path.exists(labels_path):
+                print(f"Rótulos não encontrado: {labels_path}")
+                continue
+
+
             graph_measures = np.load(file_path)
+            labels = np.load(labels_path)
 
-            session_arrays.append(graph_measures)
+            graph_sessions.append(graph_measures)
+            label_sessions.append(labels)
 
-        subject_graph_measures = np.concatenate(session_arrays, axis=0)
+        # Unindo as 3 sessões do sujeito
+        subject_graph_measures = np.concatenate(graph_sessions, axis=0)
+        labels = np.concatenate(label_sessions, axis=0)
 
-        data_by_subject_and_lag[subject] = {}
+        print(f"\n{subject} \nShape dos dados: {subject_graph_measures.shape} \nShape dos rótulos: {labels.shape}", )
 
+        results[subject] = {}
 
         for lag_idx in range(subject_graph_measures.shape[2]):
 
-            X_lag = subject_graph_measures[:, :, lag_idx, :, :]
-            X_lag = X_lag.reshape(X_lag.shape[0], -1)
+            # Seleciona um lag específico
+            X = subject_graph_measures[:, :, lag_idx, :, :]
 
-            data_by_subject_and_lag[subject][f"lag_{lag_idx}"] = X_lag
+            # Transforma em matriz 2D: (n_epochs, n_features)
+            X = X.reshape(X.shape[0], -1)
 
-            print(subject, f"lag_{lag_idx}", X_lag.shape)
+            model = Pipeline([
+                ("scaler", StandardScaler()),
+                ("svm", SVC(
+                    kernel="rbf",
+                    C=1.0,
+                    gamma="scale",
+                    class_weight=None,
+                    tol=1e-3,
+                    max_iter=-1 # o treinamento 
+                ))
+            ])
 
+            cv = StratifiedKFold(
+                n_splits=5,
+                shuffle=True,
+                random_state=42
+            )
 
-            # """___Processando os dados___"""
+            scores = cross_val_score(
+                model,
+                X,
+                labels,
+                cv=cv,
+                scoring="accuracy"
+            )
 
-            # print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
+            results[subject][f"lag_{lag_idx}"] = {
+                "scores": scores,
+                "mean_accuracy": scores.mean(),
+                "std_accuracy": scores.std()
+            }
 
-            # sync_matrices = np.load(file_path)  #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
-        
-            # graph_measures = obtain_graph_measures(sync_matrices) #graph_measures.shape = (n_epochs, n_bands, n_lags, n_channels, 2)
+            save_path = os.path.join(
+                output_path,
+                f"{subject}_lag_{lag_idx}_svm_results.pkl"
+            )
 
-            # """___Salvando os dados processados__"""
+            with open(save_path, "wb") as f:
+                pickle.dump(results, f)
 
-            # save_path = os.path.join(
-            #     output_path,
-            #     f"{subject}_{session}_graph_measures.npy"
-            # )
+            print(
+                subject,
+                f"lag_{lag_idx}",
+                "scores:", scores,
+                "mean:", scores.mean()
+            )
 
-            # np.save(save_path, graph_measures)
-
-            # print(f"Salvo em: {save_path}")
-            # print(f"Shape: {graph_measures.shape}")
 
 if __name__ == "__main__":
 
