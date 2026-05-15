@@ -79,7 +79,7 @@ def run_synchronization_matrix():
                 continue
 
             if not os.path.exists(labels_path):
-                print(f"Rótulos não encontrados: {file_path}")
+                print(f"Rótulos não encontrados: {labels_path}")
                 continue
 
 
