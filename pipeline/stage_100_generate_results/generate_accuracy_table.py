@@ -1,20 +1,21 @@
 import os
 import numpy as np
 from pathlib import Path
+from numpy.lib.stride_tricks import sliding_window_view
+import networkx as nx
 
 from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import StratifiedKFold
-
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.model_selection import StratifiedKFold, cross_val_score
 
 import pickle
+
 
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-base_path = project_root / "processed_data" / "stage_60_synchronization_matrix_graph_measure"
+base_path = project_root / "processed_data" / "stage_80_lag_based_SVM"
 output_path = project_root / "processed_data" / current_file.parents[0].name
 
 os.makedirs(output_path, exist_ok=True)
@@ -22,12 +23,10 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-def run_lag_based_SVM():
-
+def run_generate_accuracy_table():
 
     for subject in subjects:
 
-        results = {}
         graph_sessions = []
         label_sessions = []
 
@@ -60,22 +59,10 @@ def run_lag_based_SVM():
             graph_sessions.append(graph_measures)
             label_sessions.append(labels)
 
-            
-
         # Unindo as 3 sessões do sujeito
-
-        if len(graph_sessions) != len(sessions):
-            print(f"Pulando {subject}: sessões incompletas")
-            continue
-
         subject_graph_measures = np.concatenate(graph_sessions, axis=0)
         labels = np.concatenate(label_sessions, axis=0)
 
-        if subject_graph_measures.shape[0] != labels.shape[0]:
-            raise ValueError(
-                f"{subject}: número de épocas diferente do número de rótulos"
-            )
-        
         print(f"\n{subject} \nShape dos dados: {subject_graph_measures.shape} \nShape dos rótulos: {labels.shape}", )
 
         results[subject] = {}
@@ -106,44 +93,27 @@ def run_lag_based_SVM():
                 random_state=42
             )
 
-
-            scores = []
-            confusion_matrices = []
-
-            for train_idx, test_idx in cv.split(X, labels):
-
-                X_train, X_test = X[train_idx], X[test_idx]
-                y_train, y_test = labels[train_idx], labels[test_idx]
-
-                model.fit(X_train, y_train)
-
-                y_pred = model.predict(X_test)
-
-                acc = accuracy_score(y_test, y_pred)
-                scores.append(acc)
-
-                cm = confusion_matrix(
-                    y_test,
-                    y_pred,
-                    labels=np.unique(labels),
-                    normalize="true"
-                )
-
-                confusion_matrices.append(cm)
-
-            scores = np.array(scores)
-            confusion_matrices = np.array(confusion_matrices)
-
-            mean_confusion_matrix = confusion_matrices.mean(axis=0)
+            scores = cross_val_score(
+                model,
+                X,
+                labels,
+                cv=cv,
+                scoring="accuracy"
+            )
 
             results[subject][f"lag_{lag_idx}"] = {
                 "scores": scores,
                 "mean_accuracy": scores.mean(),
-                "std_accuracy": scores.std(),
-                "confusion_matrices": confusion_matrices,
-                "mean_confusion_matrix": mean_confusion_matrix
+                "std_accuracy": scores.std()
             }
-            
+
+            save_path = os.path.join(
+                output_path,
+                f"{subject}_lag_{lag_idx}_svm_results.pkl"
+            )
+
+            with open(save_path, "wb") as f:
+                pickle.dump(results, f)
 
             print(
                 subject,
@@ -152,15 +122,7 @@ def run_lag_based_SVM():
                 "mean:", scores.mean()
             )
 
-        save_path = os.path.join(
-            output_path,
-            f"{subject}_svm_results.pkl"
-        )
-
-        with open(save_path, "wb") as f:
-            pickle.dump(results, f)
-
 
 if __name__ == "__main__":
 
-    run_lag_based_SVM()
+    run_generate_accuracy_table()
