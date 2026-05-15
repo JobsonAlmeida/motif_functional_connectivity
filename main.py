@@ -5,6 +5,7 @@ from pipeline.stage_50_maximum_matrix.maximum_matrix import run_maximum_matrix
 from pipeline.stage_60_synchronization_matrix_graph_measure.graph_measure import run_synchronization_matrix_graph_measure
 from pipeline.stage_70_maximum_matrix_graph_measure.maximum_matrix_graph_measure import run_maximum_matrix_graph_measure
 from pipeline.stage_80_lag_based_SVM.lag_based_SVM import run_lag_based_SVM
+from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import run_maximum_matrix_based_SVM
 from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
 
 
@@ -20,7 +21,9 @@ def main():
 
     #run_maximum_matrix()
 
-    run_maximum_matrix_graph_measure()
+    #run_maximum_matrix_graph_measure()
+
+    run_maximum_matrix_based_SVM()
 
     
 
