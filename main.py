@@ -12,7 +12,7 @@ from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_m
 
 def main():
 
-    #run_band_filtering()
+    run_band_filtering()
     #run_motif_sequence()
     #run_synchronization_matrix()
     #run_synchronization_matrix_graph_measure()

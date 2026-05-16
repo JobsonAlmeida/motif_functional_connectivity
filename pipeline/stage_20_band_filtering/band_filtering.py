@@ -38,6 +38,10 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
     epochs_inner = epochs[mask_inner]
     labels = events[mask_inner, 1]
 
+    fs = 256
+    start = int(1.5 * fs)   # 384
+    end = int(3.5 * fs)     # 896
+
     band_arrays = []
 
     for l_freq, h_freq in bands:
@@ -51,7 +55,10 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
             verbose=False
         )
 
-        band_arrays.append(epochs_band.get_data())  # [ banda1, banda2, banda3 ] com cada banda no formato (épocas × canais × tempo)
+        # data_band.shape = (épocas, canais, tempo)
+        data_band = epochs_band.get_data()[:, :, start:end] # [ banda1, banda2, banda3 ] com cada banda no formato (épocas × canais × tempo)
+
+        band_arrays.append(data_band)  
 
     X_bands = np.stack(band_arrays, axis=1) #(época × bandas × canais × tempo)
     
