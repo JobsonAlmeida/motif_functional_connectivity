@@ -7,7 +7,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-base_path = project_root / "processed_data" / "stage_20_band_filtering"
+base_path = project_root / "processed_data" / "stage_20_band_filtering_and_epoch"
 output_path = project_root / "processed_data" / current_file.parents[0].name
 
 os.makedirs(output_path, exist_ok=True)
@@ -20,11 +20,11 @@ def obtain_motif_sequences(x_bands: np.ndarray) -> np.ndarray:
     if x_bands.ndim != 4:
         raise ValueError("x_bands deve ter 4 dimensões")
 
-    windows = sliding_window_view(x_bands, window_shape=3, axis=-1) #windows.shape = (n_trials, n_bands, n_channels, n_motifs (n_times-2), 3)
+    windows = sliding_window_view(x_bands, window_shape=3, axis=-1) #windows.shape = (epochs, bands, channels, n_motifs (n_times-2), 3)
 
-    orders = np.argsort(windows, axis=-1, kind="mergesort") #orders.shape = (n_trials, n_bands, n_channels, n_motifs, 3)
+    orders = np.argsort(windows, axis=-1, kind="mergesort") #orders.shape = (epochs, bands, channels, motifs, 3)
 
-    x_bands_motifs = np.full(orders.shape[:-1], -1, dtype=np.int32) #orders.shape = (n_trials, n_bands, n_channels, n_motifs)
+    x_bands_motifs = np.full(orders.shape[:-1], -1, dtype=np.int32) #orders.shape = (epochs, bands, channels, motifs)
 
     mapping = {
         (0, 1, 2): 0,
@@ -75,7 +75,7 @@ def run_motif_sequence():
 
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
 
-            X_bands = np.load(file_path) #(épocas × bandas × canais × tempo)
+            X_bands = np.load(file_path) #(épocas × bandas × canais × amostras)
             labels = np.load(labels_path)
 
 
