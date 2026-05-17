@@ -1,4 +1,4 @@
-# Stage 10 - Initial Preprocessing
+# Stage 20 - Band Filtering and Epoch
 
 ## Diagrams Folder
 

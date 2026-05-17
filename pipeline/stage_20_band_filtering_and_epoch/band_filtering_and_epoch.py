@@ -15,7 +15,7 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.ndarray:
+def obtain_filtered_bands_and_epochs(epochs: np.ndarray, events_path: np.ndarray) -> np.ndarray:
 
     bands = [
         (12, 15),
@@ -33,6 +33,8 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
 
     with open(events_path, "rb") as f:
             events = pickle.load(f)
+
+
 
     mask_inner = events[:, 2] == 1
     epochs_inner = epochs[mask_inner]
@@ -64,7 +66,7 @@ def obtain_filtered_bands(epochs: np.ndarray, events_path: np.ndarray) -> np.nda
     
     return X_bands, labels
 
-def run_band_filtering(): 
+def run_band_filtering_and_epoch(): 
 
     for subject in subjects:
         for session in sessions:
@@ -98,7 +100,7 @@ def run_band_filtering():
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
             epochs = mne.read_epochs(file_path, preload=True, verbose=False)
 
-            X_bands, labels = obtain_filtered_bands(epochs, events_path)
+            X_bands, labels = obtain_filtered_bands_and_epochs(epochs, events_path)
         
             """___Salvando os dados processados__"""
             
@@ -121,6 +123,7 @@ def run_band_filtering():
 
             print(f"Shape dos dados: {X_bands.shape}")
             print(f"Shape dos rótulos: {labels.shape}")
+            print(f"Labels únicos: {np.unique(labels, return_counts=True)}")
 
 
     print(f"\nFinalizado {current_file.parents[0].name}.")
@@ -128,4 +131,4 @@ def run_band_filtering():
 
 if __name__ == "__main__":
 
-    run_band_filtering()
+    run_band_filtering_and_epoch()
