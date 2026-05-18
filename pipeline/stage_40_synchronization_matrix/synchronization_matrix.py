@@ -47,6 +47,7 @@ def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
         matches = seq1[:, :, :, None, :] == seq2[:, :, None, :, :]  # matches.shape = (n_epochs, n_bands, n_channels, n_channels, n_motifs) 
 
         # Calcula a soma (contagem de acertos)
+        #np sum faz a soma dos elementos ao longo do último eixo do array e elimina essa dimensão por padrão.
         sync = matches.sum(axis=-1) #sync.shape = (n_epochs, n_bands, n_channels, n_channels)
 
         # Normaliza pelo valor máximo presente em cada matriz
