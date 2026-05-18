@@ -1,7 +1,10 @@
 # Stage 10 - Initial Preprocessing
 
-## Diagrams Folder
+## Processing Flow Diagram
 
-To open `diagrams` in this folder, access the website https://www.drawio.com/ and open the .drawio files through the website.
+![Stage 10 - Initial Preprocessing](stage_10_initial_preprocessing.drawio.svg)
 
 ---
+
+## Description
+

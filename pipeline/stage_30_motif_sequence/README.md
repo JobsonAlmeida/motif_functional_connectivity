@@ -1,7 +1,9 @@
 # Stage 30 - Motif Sequence
 
-## Diagrams Folder
+## Processing Flow Diagram
 
-To open `diagrams` in this folder, access the website https://www.drawio.com/ and open the .drawio files through the website.
+![Stage 30 - Motif Sequence](stage_30_motif_sequence.drawio.svg)
 
 ---
+
+## Description

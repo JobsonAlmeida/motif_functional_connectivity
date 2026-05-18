@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="Ti6mdSSKYCKPA6XdV7qu">
+    <mxGraphModel dx="1414" dy="766" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-1" edge="1" parent="1" source="Qcuk3-Jt5zvlesFGc21m-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;html=1;" target="Qcuk3-Jt5zvlesFGc21m-3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" value="Labels for each subject and session&amp;nbsp;&lt;br&gt;&lt;br&gt;labels data:&amp;nbsp;&lt;br&gt;[epochs]&amp;nbsp;&lt;br&gt;&lt;br&gt;" vertex="1">
+          <mxGeometry height="106" width="488.5" x="150" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" value="Labels for each subject and session&amp;nbsp;&lt;br&gt;&lt;br&gt;labels data:&amp;nbsp;&lt;br&gt;[epochs]&amp;nbsp;&lt;br&gt;&lt;br&gt;" vertex="1">
+          <mxGeometry height="106" width="488.5" x="150" y="873" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-7" edge="1" parent="1" source="Qcuk3-Jt5zvlesFGc21m-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Qcuk3-Jt5zvlesFGc21m-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;EEG signal file for each subject and session&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;eeg data:&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;[epochs x bands x channels x motifs ]&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;[ epochs x 11 x 128 x 510]&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="148" width="488.5" x="780" y="174" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-13" edge="1" parent="1" source="Qcuk3-Jt5zvlesFGc21m-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Qcuk3-Jt5zvlesFGc21m-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Compute the motif synchronization matrix for epoch and band&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="450" x="799.25" y="414" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-12" edge="1" parent="1" source="Qcuk3-Jt5zvlesFGc21m-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Qcuk3-Jt5zvlesFGc21m-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Normalize each motif synchronization matrix by the maximum minimum value of each matrix.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="151" width="476" x="786.25" y="599" as="geometry" />
+        </mxCell>
+        <mxCell id="Qcuk3-Jt5zvlesFGc21m-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;EEG signal file for each subject and session&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;eeg data:&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;[epochs x bands x lag x channels x&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 16px; text-align: left;&quot;&gt;channels&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;]&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;[ epochs x 11 x 4 x 128 x&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 16px; text-align: left;&quot;&gt;128&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;]&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="148" width="488.5" x="780" y="831" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
