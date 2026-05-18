@@ -14,13 +14,15 @@ def main():
 
     #run_band_filtering_and_epoch()
     #run_motif_sequence()
-    run_synchronization_matrix()
+    #run_synchronization_matrix()
+    run_maximum_matrix()
+    
     #run_synchronization_matrix_graph_measure()
     #run_lag_based_SVM()
 
     #run_generate_accuracy_table()
 
-    #run_maximum_matrix()
+   
 
     #run_maximum_matrix_graph_measure()
 
