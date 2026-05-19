@@ -2,7 +2,7 @@
 
 ## Processing Flow Diagram
 
-![Stage 10 - Initial Preprocessing](stage_10_initial_preprocessing.drawio.svg)
+![Stage 10 - Initial Preprocessing](./diagrams/stage_10_initial_preprocessing.drawio.svg)
 
 ---
 
