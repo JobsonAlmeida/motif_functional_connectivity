@@ -23,6 +23,9 @@ result_name = "accuracy_table"
 base_path = project_root / "processed_data" / "stage_80_lag_based_SVM"
 output_path = project_root / "results" / current_file.parents[0].name / result_name
 
+base_path_maximum_matrix = project_root / "processed_data" / "stage_90_maximum_matrix_based_SVM"
+
+
 os.makedirs(output_path, exist_ok=True)
 
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
@@ -46,16 +49,37 @@ def run_generate_accuracy_table():
         with open(file_path, "rb") as f:
             results = pickle.load(f)
 
+        file_path_max_matrices = os.path.join(
+            base_path_maximum_matrix,
+            f"{subject}_maximum_matrices_svm_results.pkl"
+        )
+
+        if not os.path.exists(file_path_max_matrices):
+            print(f"Arquivo não encontrado: {file_path_max_matrices}")
+            continue
+        
+        with open(file_path_max_matrices, "rb") as f:
+            results_max_matrices = pickle.load(f)
+
         row = {
             "Subject": subject
         }
 
+
+        # Obtendo as acurácias para cada lag
         for lag_name in results[subject]:
 
             mean_acc = results[subject][lag_name]["mean_accuracy"]
 
             row[lag_name] = mean_acc * 100
 
+
+        # obtendo as acurácias da matriz de máximo
+        for max_type in results_max_matrices[subject]:
+
+            mean_acc = results_max_matrices[subject][max_type]["mean_accuracy"]
+
+            row[max_type] = mean_acc * 100        
 
         rows.append(row) 
 
@@ -88,6 +112,8 @@ def run_generate_accuracy_table():
 
     desired_order = [
         "Subject",
+        "max_0_1_2_3",
+        "max_1_2_3",
         "lag_0",
         "lag_1",
         "lag_2",
@@ -98,6 +124,8 @@ def run_generate_accuracy_table():
 
     # Renomeando colunas
     df = df.rename(columns={
+        "max_0_1_2_3": "Max (0,1,2,3) %",
+        "max_1_2_3": "Max (1,2,3) %",
         "lag_0": "Lag 0 (%)",
         "lag_1": "Lag 1 (%)",
         "lag_2": "Lag 2 (%)",
