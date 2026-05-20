@@ -8,6 +8,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import StratifiedKFold
 
 from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.feature_selection import SelectKBest, f_classif
+
 
 import pickle
 
@@ -88,8 +90,8 @@ def run_maximum_matrix_based_SVM():
         for max_type in range(subject_graph_measures.shape[2]):
 
             # Seleciona um tipo de matriz de máximo:
-            # max_type 0 -> Max(0,1,2,3)
-            # max_type 1 -> Max(1,2,3)
+            # max_type = 0 -> Max(0,1,2,3)
+            # max_type = 1 -> Max(1,2,3)
             X = subject_graph_measures[:, :, max_type, :, :]
 
             # Transforma em matriz 2D: (n_epochs, n_features)
@@ -97,6 +99,12 @@ def run_maximum_matrix_based_SVM():
 
             model = Pipeline([
                 ("scaler", StandardScaler()),
+
+                ("selector", SelectKBest(
+                    score_func=f_classif,
+                    k=2000
+                )),               
+
                 ("svm", SVC(
                     kernel="rbf",
                     C=1.0,
@@ -105,6 +113,7 @@ def run_maximum_matrix_based_SVM():
                     tol=1e-3,
                     max_iter=-1 
                 ))
+
             ])
 
             cv = StratifiedKFold(

@@ -24,7 +24,7 @@ def run_generate_confusion_matrix_for_maximum_matrix():
 
     class_names = ["up", "down", "left", "right"]
 
-    for max_type_name in ["max_1_2_3", "max_0_1_2_3" ]:
+    for max_type_name in ["max_0_1_2_3", "max_1_2_3" ]:
 
         fig, axes = plt.subplots(2, 5, figsize=(16, 7))
         axes = axes.ravel()
@@ -92,7 +92,7 @@ def run_generate_confusion_matrix_for_maximum_matrix():
         )
 
         plt.savefig(save_path, dpi=300, bbox_inches="tight")
-        #plt.show()
+        plt.show()
 
 if __name__ == "__main__":
 
