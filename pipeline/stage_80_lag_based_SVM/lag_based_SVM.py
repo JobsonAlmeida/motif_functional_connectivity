@@ -22,6 +22,16 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
+
+def print_dict_keys(d, indent=0):
+
+    for key, value in d.items():
+
+        print("  " * indent + f"- {key}")
+
+        if isinstance(value, dict):
+            print_dict_keys(value, indent + 1)
+
 def run_lag_based_SVM():
 
 
@@ -30,6 +40,8 @@ def run_lag_based_SVM():
         results = {}
         graph_sessions = []
         label_sessions = []
+
+        print(f"\n{subject}")
 
         for session in sessions:
 
@@ -56,6 +68,8 @@ def run_lag_based_SVM():
 
             graph_measures = np.load(file_path)
             labels = np.load(labels_path)
+
+            print(f"Shape dos dados da seção: {graph_measures.shape}  \nShape dos rótulos da seção: {labels.shape}")
 
             graph_sessions.append(graph_measures)
             label_sessions.append(labels)
@@ -88,6 +102,8 @@ def run_lag_based_SVM():
             # Transforma em matriz 2D: (n_epochs, n_features)
             X = X.reshape(X.shape[0], -1)
 
+            print(f"\n{subject} \nShape da matriz de features para lag {lag_idx}: {X.shape}")
+
             model = Pipeline([
                 ("scaler", StandardScaler()),
                 ("svm", SVC(
@@ -96,7 +112,7 @@ def run_lag_based_SVM():
                     gamma="scale",
                     class_weight=None,
                     tol=1e-3,
-                    max_iter=-1 # o treinamento 
+                    max_iter=-1 # Sem número máximo de iterações
                 ))
             ])
 
@@ -143,7 +159,7 @@ def run_lag_based_SVM():
                 "confusion_matrices": confusion_matrices,
                 "mean_confusion_matrix": mean_confusion_matrix
             }
-            
+
 
             print(
                 subject,
@@ -151,6 +167,9 @@ def run_lag_based_SVM():
                 "scores:", scores,
                 "mean:", scores.mean()
             )
+
+        print_dict_keys(results)            
+
 
         save_path = os.path.join(
             output_path,

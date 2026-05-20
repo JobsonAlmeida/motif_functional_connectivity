@@ -23,4 +23,4 @@ thinking_outloud_dataset/
 
 Image showing the directory structure:
 
-![Dataset structure](directory_structure.png)
+![Dataset structure](./directory_structure.png)

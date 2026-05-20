@@ -2,7 +2,7 @@
 
 ## Processing Flow Diagram
 
-![Stage 40 - Synchronization Matrix](stage_40_synchronization_matrix.drawio.svg)
+![Stage 40 - Synchronization Matrix](./diagrams/stage_40_synchronization_matrix.drawio.svg)
 
 ---
 
