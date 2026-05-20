@@ -100,7 +100,14 @@ def run_band_filtering_and_epoch():
             print(f"\nProcessando {current_file.parents[0].name}\n{subject} {session}...")
             epochs = mne.read_epochs(file_path, preload=True, verbose=False)
 
-            X_bands, labels = obtain_filtered_bands_and_epochs(epochs, events_path)
+            X_bands, labels = obtain_filtered_bands_and_epochs(epochs, events_path) #(épocas × bandas × canais × tempos)
+
+
+            # #imprimindo os canais
+            # channel_map = {}
+            # for idx, name in enumerate(epochs.ch_names):
+            #     channel_map[idx] = name
+            # print(channel_map)
         
             """___Salvando os dados processados__"""
             

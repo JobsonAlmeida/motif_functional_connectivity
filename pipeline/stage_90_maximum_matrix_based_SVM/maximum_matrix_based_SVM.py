@@ -95,6 +95,7 @@ def run_maximum_matrix_based_SVM():
             X = subject_graph_measures[:, :, max_type, :, :]
 
             # Transforma em matriz 2D: (n_epochs, n_features)
+            
             X = X.reshape(X.shape[0], -1) #X.shape = (n_epochs, n_bands * n_channels * n_measures)
 
             model = Pipeline([
