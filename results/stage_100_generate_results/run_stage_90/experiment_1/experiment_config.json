@@ -1,0 +1,8 @@
+{
+    "use_feature_selector": true,
+    "max_k_features": 2816,
+    "selected_epochs": null,
+    "selected_bands": null,
+    "selected_channels": null,
+    "selected_measures": null
+}

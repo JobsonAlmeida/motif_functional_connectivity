@@ -9,10 +9,12 @@ from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import 
 
 from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
 from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
+from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
+
 
 def main():
 
-    run_band_filtering_and_epoch()
+    #run_band_filtering_and_epoch()
     #run_motif_sequence()
     #run_synchronization_matrix()
 
@@ -31,9 +33,19 @@ def main():
 
     #run_maximum_matrix_graph_measure()
 
-    #run_maximum_matrix_based_SVM()
+    # run_maximum_matrix_based_SVM()
 
     #run_generate_confusion_matrix_for_maximum_matrix()
+
+    run_stage_90(
+        experiment_name = "experiment_2",
+        use_feature_selector=False,
+        max_k_features=None,
+        selected_epochs=None,
+        selected_bands=None,
+        selected_channels=None,
+        selected_measures=None
+    )
 
     
 

@@ -13,6 +13,8 @@ from sklearn.feature_selection import SelectKBest, f_classif
 
 import pickle
 
+from pipeline.config.channel_mapping import CHANNELS_INDICES_MAPPING
+
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
@@ -24,7 +26,15 @@ os.makedirs(output_path, exist_ok=True)
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-def run_maximum_matrix_based_SVM():
+
+def run_maximum_matrix_based_SVM(
+    use_feature_selector=False,
+    k_features=2000,
+    selected_epochs=None,
+    selected_bands=None,
+    selected_channels=None,
+    selected_measures=None
+    ):
 
 
     for subject in subjects:
@@ -93,29 +103,75 @@ def run_maximum_matrix_based_SVM():
             # max_type = 0 -> Max(0,1,2,3)
             # max_type = 1 -> Max(1,2,3)
             X = subject_graph_measures[:, :, max_type, :, :]
+            labels_current = labels.copy()
 
-            # Transforma em matriz 2D: (n_epochs, n_features)
             
-            X = X.reshape(X.shape[0], -1) #X.shape = (n_epochs, n_bands * n_channels * n_measures)
+            # Seleção de épocas
+            if selected_epochs is not None:
+                X = X[selected_epochs]
+                labels_current = labels_current[selected_epochs]
 
-            model = Pipeline([
-                ("scaler", StandardScaler()),
+            # Seleção de bandas
+            if selected_bands is not None:
+                X = X[:, selected_bands, :, :]
 
-                ("selector", SelectKBest(
-                    score_func=f_classif,
-                    k=2000
-                )),               
+            # Seleção de canais
+            if selected_channels is not None:
+                selected_channels_indices = [
+                    CHANNELS_INDICES_MAPPING[ch]
+                    for ch in selected_channels
+                ]
+                X = X[:, :, selected_channels_indices, :]
 
+            # Seleção de measures
+            if selected_measures is not None:
+                X = X[:, :, :, selected_measures]
+
+            X = X.reshape(X.shape[0], -1)
+
+            # model = Pipeline([
+            #     ("scaler", StandardScaler()),
+
+            #     ("selector", SelectKBest(
+            #         score_func=f_classif,
+            #         k=2000
+            #     )),               
+
+            #     ("svm", SVC(
+            #         kernel="rbf",
+            #         C=1.0,
+            #         gamma="scale",
+            #         class_weight=None,
+            #         tol=1e-3,
+            #         max_iter=-1 
+            #     ))
+
+            # ])
+
+            steps = [
+                ("scaler", StandardScaler())
+            ]
+
+            if use_feature_selector:
+                steps.append(
+                    ("selector", SelectKBest(
+                        score_func=f_classif,
+                        k=k_features
+                    ))
+                )
+
+            steps.append(
                 ("svm", SVC(
                     kernel="rbf",
                     C=1.0,
                     gamma="scale",
                     class_weight=None,
                     tol=1e-3,
-                    max_iter=-1 
+                    max_iter=-1
                 ))
+            )
 
-            ])
+            model = Pipeline(steps)
 
             cv = StratifiedKFold(
                 n_splits=5,
@@ -127,10 +183,10 @@ def run_maximum_matrix_based_SVM():
             scores = []
             confusion_matrices = []
 
-            for train_idx, test_idx in cv.split(X, labels):
+            for train_idx, test_idx in cv.split(X, labels_current):
 
                 X_train, X_test = X[train_idx], X[test_idx]
-                y_train, y_test = labels[train_idx], labels[test_idx]
+                y_train, y_test = labels_current[train_idx], labels_current[test_idx]
 
                 model.fit(X_train, y_train)
 
@@ -142,7 +198,7 @@ def run_maximum_matrix_based_SVM():
                 cm = confusion_matrix(
                     y_test,
                     y_pred,
-                    labels=np.unique(labels),
+                    labels=np.unique(labels_current),
                     normalize="true"
                 )
 
