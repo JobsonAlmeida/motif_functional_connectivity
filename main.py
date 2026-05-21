@@ -11,6 +11,7 @@ from pipeline.stage_100_generate_results.generate_accuracy_table import run_gene
 from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
 from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
 
+from pipeline.config.specific_group_channels import only_channels_D
 
 def main():
 
@@ -35,17 +36,22 @@ def main():
 
     # run_maximum_matrix_based_SVM()
 
-    #run_generate_confusion_matrix_for_maximum_matrix()
 
     run_stage_90(
-        experiment_name = "experiment_2",
-        use_feature_selector=False,
-        max_k_features=None,
+        experiment_name = "experiment_4",
+
+        use_feature_selector=True, #False or True
+        specific_k_features = False,    # False o um número 
+        max_k_features=None,        #None significa usar o numero máximo possível de features 
+        
+
         selected_epochs=None,
         selected_bands=None,
-        selected_channels=None,
+        selected_channels=only_channels_D,
         selected_measures=None
     )
+
+    
 
     
 

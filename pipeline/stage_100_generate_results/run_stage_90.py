@@ -5,6 +5,7 @@ import pickle
 import matplotlib.pyplot as plt
 import json
 
+from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
 
 from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import (
     run_maximum_matrix_based_SVM
@@ -31,11 +32,16 @@ def run_stage_90(
     experiment_name = "experiment_base",
     use_feature_selector=True,
     max_k_features=None,
+    specific_k_features = False,
     selected_epochs=None,
     selected_bands=None,
     selected_channels=None,
     selected_measures=None
 ):
+
+    # # Lauch error if both are True at the same time
+    # if max_k_features and specific_k_features:
+    #     raise ValueError("Cannot use 'max_k_features' and 'specific_k_feature' at the same time.")
 
     if max_k_features is None:
 
@@ -71,20 +77,13 @@ def run_stage_90(
         json.dump(config, f, indent=4)
 
 
-    # Guarda os resultados assim:
-    # accuracies["max_0_1_2_3"]["sub-01"] = [acc_k1, acc_k2, ...]
-    accuracies = {
-        "max_0_1_2_3": {subject: [] for subject in subjects},
-        "max_1_2_3": {subject: [] for subject in subjects}
-    }
+    if use_feature_selector is not True:
 
-    k_values = list(range(1, max_k_features + 1))
-
-    for k_features in k_values:
-
-        print(f"\nExecutando SVM com k_features = {k_features}")
+        k_features = None
 
         run_maximum_matrix_based_SVM(
+            config,
+            config_path,
             use_feature_selector=use_feature_selector,
             k_features=k_features,
             selected_epochs=selected_epochs,
@@ -93,41 +92,88 @@ def run_stage_90(
             selected_measures=selected_measures
         )
 
-        for subject in subjects:
+        run_generate_confusion_matrix_for_maximum_matrix(output_path/experiment_name)
 
-            file_path = base_path / f"{subject}_maximum_matrices_svm_results.pkl"
+    elif use_feature_selector is True and isinstance(specific_k_features, (int)) and specific_k_features != 0:
 
-            if not file_path.exists():
-                print(f"Arquivo não encontrado: {file_path}")
-                continue
+        run_maximum_matrix_based_SVM(
+            config,
+            config_path,
+            use_feature_selector=use_feature_selector,
+            k_features=specific_k_features,
+            selected_epochs=selected_epochs,
+            selected_bands=selected_bands,
+            selected_channels=selected_channels,
+            selected_measures=selected_measures
+        )
 
-            with open(file_path, "rb") as f:
-                results = pickle.load(f)
-
-            for max_type_name in max_type_names.values():
-
-                mean_accuracy = results[subject][max_type_name]["mean_accuracy"]
-
-                accuracies[max_type_name][subject].append(mean_accuracy)
-
-    generate_accuracy_plots(
-        experiment_name,
-        accuracies=accuracies,
-        k_values=k_values,
+        run_generate_confusion_matrix_for_maximum_matrix(output_path/experiment_name)
         
-    )
 
-    save_top_n_accuracies(
-        experiment_name,
-        accuracies,
-        k_values,
-        top_n=3
-    )
+    elif use_feature_selector is True and isinstance(max_k_features, (int)) and max_k_features != 0:
 
-    plot_top_n_accuracies_from_json(
-        experiment_name,
-        top_n=3
-    )
+
+        # Guarda os resultados assim:
+        # accuracies["max_0_1_2_3"]["sub-01"] = [acc_k1, acc_k2, ...]
+        accuracies = {
+            "max_0_1_2_3": {subject: [] for subject in subjects},
+            "max_1_2_3": {subject: [] for subject in subjects}
+        }
+
+        k_values = list(range(1, max_k_features + 1))
+
+
+        for k_features in k_values:
+
+            print(f"\nExecutando SVM com k_features = {k_features}")
+
+            run_maximum_matrix_based_SVM(
+                config,
+                config_path,
+                use_feature_selector=use_feature_selector,
+                k_features=k_features,
+                selected_epochs=selected_epochs,
+                selected_bands=selected_bands,
+                selected_channels=selected_channels,
+                selected_measures=selected_measures
+            )
+
+            for subject in subjects:
+
+                file_path = base_path / f"{subject}_maximum_matrices_svm_results.pkl"
+
+                if not file_path.exists():
+                    print(f"Arquivo não encontrado: {file_path}")
+                    continue
+
+                with open(file_path, "rb") as f:
+                    results = pickle.load(f)
+
+                for max_type_name in max_type_names.values():
+
+                    mean_accuracy = results[subject][max_type_name]["mean_accuracy"]
+
+                    accuracies[max_type_name][subject].append(mean_accuracy)
+
+        generate_accuracy_plots(
+            experiment_name,
+            accuracies=accuracies,
+            k_values=k_values,
+            
+        )
+
+        top_n = min(3, len(k_values))    
+        save_top_n_accuracies(
+            experiment_name,
+            accuracies,
+            k_values,
+            top_n=top_n
+        )
+
+        plot_top_n_accuracies_from_json(
+            experiment_name,
+            top_n=top_n
+        )
 
 def generate_accuracy_plots(experiment_name, accuracies, k_values):
 

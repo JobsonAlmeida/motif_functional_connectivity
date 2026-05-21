@@ -11,7 +11,7 @@ project_root = current_file.parents[2]
 
 base_path = project_root / "processed_data" / "stage_90_maximum_matrix_based_SVM"
 
-result_name = "accuracy_table"
+result_name = "confusion_maximum_matrices"
 output_path = project_root / "results" / current_file.parents[0].name / result_name
 
 os.makedirs(output_path, exist_ok=True)
@@ -20,7 +20,7 @@ subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
-def run_generate_confusion_matrix_for_maximum_matrix():
+def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
 
     class_names = ["up", "down", "left", "right"]
 

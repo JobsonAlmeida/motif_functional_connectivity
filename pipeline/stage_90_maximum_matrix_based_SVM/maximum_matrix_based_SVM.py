@@ -12,6 +12,8 @@ from sklearn.feature_selection import SelectKBest, f_classif
 
 
 import pickle
+import json
+
 
 from pipeline.config.channel_mapping import CHANNELS_INDICES_MAPPING
 
@@ -28,6 +30,8 @@ sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
 def run_maximum_matrix_based_SVM(
+    config,
+    config_path,
     use_feature_selector=False,
     k_features=2000,
     selected_epochs=None,
@@ -178,6 +182,18 @@ def run_maximum_matrix_based_SVM(
                 shuffle=True,
                 random_state=42
             )
+
+            if "model_config" not in config:
+
+                model_config = {
+                    key: str(value)
+                    for key, value in model.get_params().items()
+                }   
+
+                config["model_config"] = model_config  
+                
+                with open(config_path, "w") as f:
+                    json.dump(config, f, indent=4)              
 
 
             scores = []
