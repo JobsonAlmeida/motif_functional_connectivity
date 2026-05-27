@@ -36,20 +36,22 @@ def main():
 
     # run_maximum_matrix_based_SVM()
 
+    run_maximum_matrix_based_SVM()
 
-    run_stage_90(
-        experiment_name = "experiment_4",
 
-        use_feature_selector=True, #False or True
-        specific_k_features = False,    # False o um número 
-        max_k_features=None,        #None significa usar o numero máximo possível de features 
+    # run_stage_90(
+    #     experiment_name = "experiment_4",
+
+    #     use_feature_selector=True, #False or True
+    #     specific_k_features = False,    # False o um número 
+    #     max_k_features=None,        #None significa usar o numero máximo possível de features 
         
 
-        selected_epochs=None,
-        selected_bands=None,
-        selected_channels=only_channels_D,
-        selected_measures=None
-    )
+    #     selected_epochs=None,
+    #     selected_bands=None,
+    #     selected_channels=only_channels_D,
+    #     selected_measures=None
+    # )
 
     
 

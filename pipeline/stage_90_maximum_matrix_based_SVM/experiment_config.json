@@ -1,0 +1,28 @@
+{
+    "model_config": {
+        "memory": "None",
+        "steps": "[('scaler', StandardScaler()), ('svm', SVC())]",
+        "transform_input": "None",
+        "verbose": "False",
+        "scaler": "StandardScaler()",
+        "svm": "SVC()",
+        "scaler__copy": "True",
+        "scaler__with_mean": "True",
+        "scaler__with_std": "True",
+        "svm__C": "1.0",
+        "svm__break_ties": "False",
+        "svm__cache_size": "200",
+        "svm__class_weight": "None",
+        "svm__coef0": "0.0",
+        "svm__decision_function_shape": "ovr",
+        "svm__degree": "3",
+        "svm__gamma": "scale",
+        "svm__kernel": "rbf",
+        "svm__max_iter": "-1",
+        "svm__probability": "False",
+        "svm__random_state": "None",
+        "svm__shrinking": "True",
+        "svm__tol": "0.001",
+        "svm__verbose": "False"
+    }
+}

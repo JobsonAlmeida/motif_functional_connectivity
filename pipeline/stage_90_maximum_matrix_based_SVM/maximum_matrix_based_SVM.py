@@ -30,8 +30,8 @@ sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
 def run_maximum_matrix_based_SVM(
-    config,
-    config_path,
+    config = {},
+    config_path = "./pipeline/stage_90_maximum_matrix_based_SVM/experiment_config.json",
     use_feature_selector=False,
     k_features=2000,
     selected_epochs=None,
@@ -103,10 +103,11 @@ def run_maximum_matrix_based_SVM(
 
         for max_type in range(subject_graph_measures.shape[2]):
 
+            #X.shape = (epochs, bands, max_types, channels, measures)
             # Seleciona um tipo de matriz de máximo:
             # max_type = 0 -> Max(0,1,2,3)
             # max_type = 1 -> Max(1,2,3)
-            X = subject_graph_measures[:, :, max_type, :, :]
+            X = subject_graph_measures[:, :, max_type, :, :] #X.shape = (epochs, bands, channels, measures)
             labels_current = labels.copy()
 
             
