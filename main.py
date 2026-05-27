@@ -36,7 +36,8 @@ def main():
 
     # run_maximum_matrix_based_SVM()
 
-    run_maximum_matrix_based_SVM()
+    #run_maximum_matrix_based_SVM()
+    run_generate_confusion_matrix_for_maximum_matrix()
 
 
     # run_stage_90(
