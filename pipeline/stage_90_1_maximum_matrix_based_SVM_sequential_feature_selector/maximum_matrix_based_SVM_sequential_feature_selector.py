@@ -6,16 +6,19 @@ from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_selection import SequentialFeatureSelector
 
 from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif
+from sklearn.feature_selection import SelectKBest, f_classif
 
 
 import pickle
 import json
 
 
-from pipeline.config.channel_mapping import INDICES_CHANNELS_MAPPING
+from pipeline.config.channel_mapping import CHANNELS_INDICES_MAPPING
+
+
 
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
@@ -25,14 +28,23 @@ output_path = project_root / "processed_data" / current_file.parents[0].name
 
 os.makedirs(output_path, exist_ok=True)
 
-subjects = [f"sub-{i:02d}" for i in range(1, 11)]
+#subjects = [f"sub-{i:02d}" for i in range(1, 11)]
+subjects = ["sub-01"]
+
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
-def run_maximum_matrix_based_SVM(
-    k_features=3,
-    output_path = output_path
+def run_maximum_matrix_based_SVM_sequential_feature_selector(
+    config = {},
+    config_path = "./pipeline/stage_90_1_maximum_matrix_based_SVM_sequential_feature_selector/experiment_config.json",
+    use_feature_selector=True,
+    k_features=1,
+    selected_epochs=None,
+    selected_bands=None,
+    selected_channels=None,
+    selected_measures=None
     ):
+
 
     for subject in subjects:
 
@@ -103,22 +115,82 @@ def run_maximum_matrix_based_SVM(
             X = subject_graph_measures[:, :, max_type, :, :] #X.shape = (epochs, bands, channels, measures)
             labels_current = labels.copy()
 
+            
+            # Seleção de épocas
+            if selected_epochs is not None:
+                X = X[selected_epochs]
+                labels_current = labels_current[selected_epochs]
 
-            X_original = X.copy()
+            # Seleção de bandas
+            if selected_bands is not None:
+                X = X[:, selected_bands, :, :]
+
+            # Seleção de canais
+            if selected_channels is not None:
+                selected_channels_indices = [
+                    CHANNELS_INDICES_MAPPING[ch]
+                    for ch in selected_channels
+                ]
+                X = X[:, :, selected_channels_indices, :]
+
+            # Seleção de measures
+            if selected_measures is not None:
+                X = X[:, :, :, selected_measures]
 
             X = X.reshape(X.shape[0], -1)
+
+            # model = Pipeline([
+            #     ("scaler", StandardScaler()),
+
+            #     ("selector", SelectKBest(
+            #         score_func=f_classif,
+            #         k=2000
+            #     )),               
+
+            #     ("svm", SVC(
+            #         kernel="rbf",
+            #         C=1.0,
+            #         gamma="scale",
+            #         class_weight=None,
+            #         tol=1e-3,
+            #         max_iter=-1 
+            #     ))
+
+            # ])
 
             steps = [
                 ("scaler", StandardScaler())
             ]
 
-            
-            steps.append(
-                ("selector", SelectKBest(
-                    score_func=f_classif,
-                    k=k_features
-                ))
-            )
+            # if use_feature_selector:
+            #     steps.append(
+            #         ("selector", SelectKBest(
+            #             score_func=f_classif,
+            #             k=k_features
+            #         ))
+            #     )
+
+            if use_feature_selector:
+
+                selector_estimator = SVC(
+                    kernel="rbf",
+                    C=1.0,
+                    gamma="scale",
+                    class_weight=None,
+                    tol=1e-3,
+                    max_iter=-1
+                )
+
+                steps.append(
+                    ("selector", SequentialFeatureSelector(
+                        estimator=selector_estimator,
+                        n_features_to_select=k_features,
+                        direction="forward",
+                        scoring="accuracy",
+                        cv=5,
+                        n_jobs=-1
+                    ))
+                )
 
             steps.append(
                 ("svm", SVC(
@@ -139,10 +211,21 @@ def run_maximum_matrix_based_SVM(
                 random_state=42
             )
 
+            if "model_config" not in config:
+
+                model_config = {
+                    key: str(value)
+                    for key, value in model.get_params().items()
+                }   
+
+                config["model_config"] = model_config  
+                
+                with open(config_path, "w") as f:
+                    json.dump(config, f, indent=4)              
+
+
             scores = []
             confusion_matrices = []
-
-            selected_features_all_folds = []
 
             for train_idx, test_idx in cv.split(X, labels_current):
 
@@ -150,38 +233,6 @@ def run_maximum_matrix_based_SVM(
                 y_train, y_test = labels_current[train_idx], labels_current[test_idx]
 
                 model.fit(X_train, y_train)
-
-                #salvando as features utilizadas
-
-                selector = model.named_steps["selector"]
-
-                selected_features = np.where(
-                    selector.get_support()
-                )[0]
-
-                n_bands = X_original.shape[1]
-                n_channels = X_original.shape[2]
-                n_measures = X_original.shape[3]
-
-                feature_info = []
-
-                for feature_idx in selected_features:
-
-                    band_idx, channel_idx, measure_idx = np.unravel_index(
-                        feature_idx,
-                        (n_bands, n_channels, n_measures)
-                    )
-
-                    feature_info.append({
-                        "feature_idx": int(feature_idx),
-                        "band": int(band_idx),
-                        "channel_index": int(channel_idx),
-                        "channel_name": INDICES_CHANNELS_MAPPING[channel_idx],
-                        "measure": int(measure_idx)
-                    })
-
-                selected_features_all_folds.append(feature_info)
-
 
                 y_pred = model.predict(X_test)
 
@@ -201,15 +252,15 @@ def run_maximum_matrix_based_SVM(
             confusion_matrices = np.array(confusion_matrices)
 
             mean_confusion_matrix = confusion_matrices.mean(axis=0)
-       
+
+
+                        
             results[subject][max_type_names[max_type]] = {
-                "k_features": k_features,
                 "scores": scores,
                 "mean_accuracy": scores.mean(),
                 "std_accuracy": scores.std(),
                 "confusion_matrices": confusion_matrices,
-                "mean_confusion_matrix": mean_confusion_matrix,
-                "selected_features": selected_features_all_folds
+                "mean_confusion_matrix": mean_confusion_matrix
             }
 
 
@@ -222,7 +273,7 @@ def run_maximum_matrix_based_SVM(
 
         save_path = os.path.join(
             output_path,
-            f"{subject}_maximum_matrices_svm_results_k_{k_features}.pkl"
+            f"{subject}_maximum_matrices_svm_results.pkl"
         )
 
         with open(save_path, "wb") as f:
@@ -231,4 +282,4 @@ def run_maximum_matrix_based_SVM(
 
 if __name__ == "__main__":
 
-    run_maximum_matrix_based_SVM()
+    run_maximum_matrix_based_SVM_sequential_feature_selector()

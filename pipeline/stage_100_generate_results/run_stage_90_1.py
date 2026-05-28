@@ -7,20 +7,20 @@ import json
 
 from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
 
-from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import (
-    run_maximum_matrix_based_SVM
-)
+
+from pipeline.stage_90_1_maximum_matrix_based_SVM_sequential_feature_selector.maximum_matrix_based_SVM_sequential_feature_selector import run_maximum_matrix_based_SVM_sequential_feature_selector
 
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-base_path = project_root / "processed_data" / "stage_90_maximum_matrix_based_SVM"
+base_path = project_root / "processed_data" / "stage_90_1_maximum_matrix_based_SVM_sequential_feature_selector"
 
-result_name = "run_stage_90"
+result_name = "run_stage_90_1"
 output_path = project_root / "results" / current_file.parents[0].name / result_name
 os.makedirs(output_path, exist_ok=True)
 
-subjects = [f"sub-{i:02d}" for i in range(1, 11)]
+# subjects = [f"sub-{i:02d}" for i in range(1, 11)]
+subjects = ["sub-01"]
 
 max_type_names = {
     0: "max_0_1_2_3",
@@ -28,10 +28,11 @@ max_type_names = {
 }
 
 
-def run_stage_90(
+def run_stage_90_1(
     experiment_name = "experiment_base",
     use_feature_selector=True,
-    max_k_features=None,
+    max_k_features=3,
+
     specific_k_features = False,
     selected_epochs=None,
     selected_bands=None,
@@ -81,7 +82,7 @@ def run_stage_90(
 
         k_features = None
 
-        run_maximum_matrix_based_SVM(
+        run_maximum_matrix_based_SVM_sequential_feature_selector(
             config,
             config_path,
             use_feature_selector=use_feature_selector,
@@ -96,7 +97,7 @@ def run_stage_90(
 
     elif use_feature_selector is True and isinstance(specific_k_features, (int)) and specific_k_features != 0:
 
-        run_maximum_matrix_based_SVM(
+        run_maximum_matrix_based_SVM_sequential_feature_selector(
             config,
             config_path,
             use_feature_selector=use_feature_selector,
@@ -127,7 +128,7 @@ def run_stage_90(
 
             print(f"\nExecutando SVM com k_features = {k_features}")
 
-            run_maximum_matrix_based_SVM(
+            run_maximum_matrix_based_SVM_sequential_feature_selector(
                 config,
                 config_path,
                 use_feature_selector=use_feature_selector,
@@ -345,4 +346,4 @@ def plot_top_n_accuracies_from_json(experiment_name, top_n=3):
 
 if __name__ == "__main__":
 
-    run_stage_90()
+    run_stage_90_1()

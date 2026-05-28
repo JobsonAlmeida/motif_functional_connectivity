@@ -5,11 +5,18 @@ from pipeline.stage_50_maximum_matrix.maximum_matrix import run_maximum_matrix
 from pipeline.stage_60_synchronization_matrix_graph_measure.graph_measure import run_synchronization_matrix_graph_measure
 from pipeline.stage_70_maximum_matrix_graph_measure.maximum_matrix_graph_measure import run_maximum_matrix_graph_measure
 from pipeline.stage_80_lag_based_SVM.lag_based_SVM import run_lag_based_SVM
+
+#from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM_old import run_maximum_matrix_based_SVM
+#from pipeline.stage_90_1_maximum_matrix_based_SVM_sequential_feature_selector.maximum_matrix_based_SVM_sequential_feature_selector import run_maximum_matrix_based_SVM_sequential_feature_selector
 from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import run_maximum_matrix_based_SVM
 
-from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
+from pipeline.stage_100_generate_results.run_stage_90_in_loop import run_stage_90_in_loop
+# from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
 from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
-from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
+# from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
+# from pipeline.stage_100_generate_results.run_stage_90_1 import run_stage_90_1
+# from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
+from pipeline.stage_100_generate_results.generate_topographic_plot import plot_topographic
 
 from pipeline.config.specific_group_channels import only_channels_D
 
@@ -37,26 +44,34 @@ def main():
     # run_maximum_matrix_based_SVM()
 
     #run_maximum_matrix_based_SVM()
-    run_generate_confusion_matrix_for_maximum_matrix()
+    #run_generate_confusion_matrix_for_maximum_matrix()
+
+    #run_maximum_matrix_based_SVM_sequential_feature_selector()
+
+    # run_stage_90_1(
+    #     experiment_name = "experiment_1",
+    #     use_feature_selector = True,
+    #     max_k_features = 3        
+    #     )
 
 
     # run_stage_90(
-    #     experiment_name = "experiment_4",
-
+    #     experiment_name = "experiment_3",
     #     use_feature_selector=True, #False or True
-    #     specific_k_features = False,    # False o um número 
     #     max_k_features=None,        #None significa usar o numero máximo possível de features 
-        
-
-    #     selected_epochs=None,
-    #     selected_bands=None,
-    #     selected_channels=only_channels_D,
-    #     selected_measures=None
     # )
 
-    
 
+    #run_maximum_matrix_based_SVM()
+
+    # run_stage_90_in_loop(
+    #     k_features = [20, 40, 60, 80, 100], 
+    #     experiment_name="experiment_1" 
+    # )
+
+    plot_topographic()
     
+   
 
 
 if __name__ == "__main__":

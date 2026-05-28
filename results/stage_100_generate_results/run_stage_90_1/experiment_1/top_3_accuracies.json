@@ -1,0 +1,40 @@
+{
+    "max_0_1_2_3": {
+        "sub-01": [
+            {
+                "rank": 1,
+                "k_features": 2,
+                "mean_accuracy": 0.26000000000000006
+            },
+            {
+                "rank": 2,
+                "k_features": 3,
+                "mean_accuracy": 0.23000000000000004
+            },
+            {
+                "rank": 3,
+                "k_features": 1,
+                "mean_accuracy": 0.22000000000000003
+            }
+        ]
+    },
+    "max_1_2_3": {
+        "sub-01": [
+            {
+                "rank": 1,
+                "k_features": 1,
+                "mean_accuracy": 0.23000000000000004
+            },
+            {
+                "rank": 2,
+                "k_features": 3,
+                "mean_accuracy": 0.22999999999999998
+            },
+            {
+                "rank": 3,
+                "k_features": 2,
+                "mean_accuracy": 0.2
+            }
+        ]
+    }
+}

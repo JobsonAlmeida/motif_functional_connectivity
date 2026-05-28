@@ -33,7 +33,7 @@ def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
 
             file_path = os.path.join(
                 base_path,
-                f"{subject}_maximum_matrices_svm_results.pkl"
+                f"{subject}_maximum_matrices_svm_results_k_3.pkl"
             )
 
             with open(file_path, "rb") as f:
