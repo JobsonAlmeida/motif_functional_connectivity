@@ -17,6 +17,7 @@ from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_m
 # from pipeline.stage_100_generate_results.run_stage_90_1 import run_stage_90_1
 # from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
 from pipeline.stage_100_generate_results.generate_topographic_plot import plot_topographic
+from pipeline.stage_100_generate_results.generate_band_contributions_across_k import plot_band_contributions_across_k
 
 from pipeline.config.specific_group_channels import only_channels_D
 
@@ -65,11 +66,13 @@ def main():
     #run_maximum_matrix_based_SVM()
 
     # run_stage_90_in_loop(
-    #     k_features = [20, 40, 60, 80, 100], 
-    #     experiment_name="experiment_1" 
+    #     k_features = range(1,5), 
+    #     experiment_name="experiment_2" 
     # )
 
-    plot_topographic()
+    #plot_topographic()
+
+    plot_band_contributions_across_k()
     
    
 

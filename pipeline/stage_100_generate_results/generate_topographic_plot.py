@@ -126,8 +126,13 @@ def plot_topographic():
             contours=6,
             cmap="Reds",
             vlim=(vmin, vmax),
-            sensors=True
+            sensors=True,
+            #names=info.ch_names
+          
+            
         )
+
+        
 
         ax.set_title(f"top-{k}", fontsize=10)
 
