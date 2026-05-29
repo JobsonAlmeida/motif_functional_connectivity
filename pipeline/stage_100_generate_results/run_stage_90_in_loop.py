@@ -1,6 +1,9 @@
 
 from pathlib import Path
 import os
+import json
+
+from pipeline.config.build_feature_selector import build_feature_selector
 
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
@@ -13,10 +16,13 @@ from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import 
 )
 
 def run_stage_90_in_loop(
-        k_features = [3,4,5],
+        feature_selector = "f_classif",
+        k_features = [20, 40, 60, 80, 100],
         output_path = output_path,
         experiment_name = "experiment_base" 
 ):
+    
+    k_features = list(k_features)
     
     experiment_output_path = output_path/experiment_name
 
@@ -28,12 +34,19 @@ def run_stage_90_in_loop(
             f'Delete the folder or change the name.'
         ) 
 
+    _ , selector_config = build_feature_selector(feature_selector, k_features)
+
+    config_path = experiment_output_path / "experiment_config.json"
+
+    with open(config_path, "w") as f:
+        json.dump(selector_config, f, indent=4)
 
     for k in k_features:
 
         print(f"\nExecutando experimento com k_features={k}\n")
 
         run_maximum_matrix_based_SVM(
+            feature_selector = feature_selector,
             k_features=k,
             output_path= experiment_output_path,
         )

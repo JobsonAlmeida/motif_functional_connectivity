@@ -9,12 +9,11 @@ from sklearn.model_selection import StratifiedKFold
 
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif
-
+from sklearn.feature_selection import SequentialFeatureSelector
 
 import pickle
-import json
 
-
+from pipeline.config.build_feature_selector import build_feature_selector
 from pipeline.config.channel_mapping import INDICES_CHANNELS_MAPPING
 
 current_file = Path(__file__).resolve()
@@ -23,16 +22,17 @@ project_root = current_file.parents[2]
 base_path = project_root / "processed_data" / "stage_70_maximum_matrix_graph_measure"
 output_path = project_root / "processed_data" / current_file.parents[0].name
 
-os.makedirs(output_path, exist_ok=True)
-
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
-
 def run_maximum_matrix_based_SVM(
     k_features=3,
-    output_path = output_path
+    feature_selector = "f_classif",
+    output_path = output_path,
+    
     ):
+
+    os.makedirs(output_path, exist_ok=True)
 
     for subject in subjects:
 
@@ -112,13 +112,11 @@ def run_maximum_matrix_based_SVM(
                 ("scaler", StandardScaler())
             ]
 
-            
-            steps.append(
-                ("selector", SelectKBest(
-                    score_func=f_classif,
-                    k=k_features
-                ))
+            selector, _ = build_feature_selector(
+                feature_selector=feature_selector,
+                k_features=k_features
             )
+            steps.append(("selector", selector))
 
             steps.append(
                 ("svm", SVC(
@@ -174,7 +172,7 @@ def run_maximum_matrix_based_SVM(
 
                     feature_info.append({
                         "feature_idx": int(feature_idx),
-                        "band": int(band_idx),
+                        "band_index": int(band_idx),
                         "channel_index": int(channel_idx),
                         "channel_name": INDICES_CHANNELS_MAPPING[channel_idx],
                         "measure": int(measure_idx)

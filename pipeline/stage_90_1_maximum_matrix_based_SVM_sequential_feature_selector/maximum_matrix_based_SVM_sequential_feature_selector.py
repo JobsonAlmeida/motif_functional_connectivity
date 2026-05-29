@@ -34,6 +34,7 @@ subjects = ["sub-01"]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
+
 def run_maximum_matrix_based_SVM_sequential_feature_selector(
     config = {},
     config_path = "./pipeline/stage_90_1_maximum_matrix_based_SVM_sequential_feature_selector/experiment_config.json",

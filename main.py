@@ -11,17 +11,24 @@ from pipeline.stage_80_lag_based_SVM.lag_based_SVM import run_lag_based_SVM
 from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import run_maximum_matrix_based_SVM
 
 from pipeline.stage_100_generate_results.run_stage_90_in_loop import run_stage_90_in_loop
-# from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
-from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
-# from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
-# from pipeline.stage_100_generate_results.run_stage_90_1 import run_stage_90_1
-# from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
-from pipeline.stage_100_generate_results.generate_topographic_plot import plot_topographic
-from pipeline.stage_100_generate_results.generate_band_contributions_across_k import plot_band_contributions_across_k
-from pipeline.stage_100_generate_results.generate_accuracy_accross_k_plot import generate_accuracy_accross_k_plot
+# # from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
+# from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
+# # from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
+# # from pipeline.stage_100_generate_results.run_stage_90_1 import run_stage_90_1
+# # from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
+# from pipeline.stage_100_generate_results.generate_topographic_plot import plot_topographic
+# from pipeline.stage_100_generate_results.generate_band_contributions_across_k import plot_band_contributions_across_k
+# from pipeline.stage_100_generate_results.generate_accuracy_accross_k_plot import generate_accuracy_accross_k_plot
 
 
 from pipeline.config.specific_group_channels import only_channels_D
+
+from pathlib import Path
+import os
+
+current_file = Path(__file__).resolve()
+project_root = current_file.parents[0]
+
 
 def main():
 
@@ -65,18 +72,20 @@ def main():
     # )
 
 
-    #run_maximum_matrix_based_SVM()
+    # run_maximum_matrix_based_SVM(feature_selector = "mutual_info",
+    #                              k_features= 3)
 
-    # run_stage_90_in_loop(
-    #     k_features = range(1,5), 
-    #     experiment_name="experiment_2" 
-    # )
+    run_stage_90_in_loop(
+        feature_selector = "mutual_info",
+        k_features= range(1, 4),
+        experiment_name="experiment_1", 
+    )
 
     #plot_topographic()
 
     # plot_band_contributions_across_k()
 
-    generate_accuracy_accross_k_plot()
+    #generate_accuracy_accross_k_plot()
     
    
 

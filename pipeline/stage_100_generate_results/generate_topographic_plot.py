@@ -11,6 +11,7 @@ project_root = current_file.parents[2]
 
 experiment_name = "experiment_1"
 
+
 base_path = (
     project_root
     / "results"
@@ -27,7 +28,6 @@ output_path = (
     / experiment_name
 )
 
-output_path.mkdir(parents=True, exist_ok=True)
 
 
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
@@ -96,6 +96,8 @@ def create_info():
 
 
 def plot_topographic():
+
+    output_path.mkdir(parents=True, exist_ok=True)
 
     info = create_info()
 
