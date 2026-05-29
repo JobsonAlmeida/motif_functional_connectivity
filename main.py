@@ -18,6 +18,8 @@ from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_m
 # from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
 from pipeline.stage_100_generate_results.generate_topographic_plot import plot_topographic
 from pipeline.stage_100_generate_results.generate_band_contributions_across_k import plot_band_contributions_across_k
+from pipeline.stage_100_generate_results.generate_accuracy_accross_k_plot import generate_accuracy_accross_k_plot
+
 
 from pipeline.config.specific_group_channels import only_channels_D
 
@@ -72,7 +74,9 @@ def main():
 
     #plot_topographic()
 
-    plot_band_contributions_across_k()
+    # plot_band_contributions_across_k()
+
+    generate_accuracy_accross_k_plot()
     
    
 
