@@ -9,29 +9,7 @@ from pathlib import Path
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-experiment_name = "experiment_1"
-
-base_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "run_stage_90_in_loop"
-    / experiment_name
-)
-
-output_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "generate_accuracy_across_k"
-    / experiment_name
-)
-
-os.makedirs(output_path, exist_ok=True)
-
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
-
-k_features = [20, 40, 60, 80, 100]
 
 max_type_names = [
     "max_0_1_2_3",
@@ -39,7 +17,7 @@ max_type_names = [
 ]
 
 
-def load_results_across_k():
+def load_results_across_k(k_features, base_path):
     results_across_k = {
         max_type: {subject: [] for subject in subjects}
         for max_type in max_type_names
@@ -65,7 +43,7 @@ def load_results_across_k():
     return results_across_k
 
 
-def plot_accuracy_across_k(results_across_k):
+def plot_accuracy_across_k(results_across_k, k_features, output_path):
     for max_type in max_type_names:
 
         plt.figure(figsize=(12, 6))
@@ -98,10 +76,34 @@ def plot_accuracy_across_k(results_across_k):
         print(f"Imagem salva em: {save_path}")
 
 
-def generate_accuracy_accross_k_plot():
+def generate_accuracy_accross_k_plot(
+        k_features = [20, 40, 60, 80, 100],
+        experiment_name = "experiment_base"
+):
+    
+    base_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "run_stage_90_in_loop"
+        / experiment_name
 
-    results_across_k = load_results_across_k()
-    plot_accuracy_across_k(results_across_k)
+    )
+
+    output_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "generate_accuracy_across_k"
+        /experiment_name
+    )
+
+    k_features = list(k_features)
+
+    os.makedirs(output_path, exist_ok=True)
+
+    results_across_k = load_results_across_k(k_features, base_path)
+    plot_accuracy_across_k(results_across_k, k_features, output_path)
 
 
 if __name__ == "__main__":
