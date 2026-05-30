@@ -26,7 +26,7 @@ subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 def run_maximum_matrix_based_SVM(
-    k_features=3,
+    k_features = 3,
     feature_selector = "f_classif",
     output_path = output_path,
     
@@ -116,7 +116,11 @@ def run_maximum_matrix_based_SVM(
                 feature_selector=feature_selector,
                 k_features=k_features
             )
-            steps.append(("selector", selector))
+
+            if selector is not None:
+                steps.append(
+                    ("selector", selector)
+                )            
 
             steps.append(
                 ("svm", SVC(

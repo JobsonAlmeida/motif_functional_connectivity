@@ -9,35 +9,12 @@ from pipeline.config.channel_mapping import INDICES_CHANNELS_MAPPING
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-experiment_name = "experiment_1"
-
-
-base_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "run_stage_90_in_loop"
-    / experiment_name
-)
-
-output_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "generate_topographic_plot"
-    / experiment_name
-)
-
-
-
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
-
-k_features_list = [20, 40, 60, 80, 100]
 
 max_type_name = "max_1_2_3"   # lags = [1, 2, 3]
 
 
-def compute_electrode_frequency(k_features):
+def compute_electrode_frequency(k_features, base_path):
     """
     Conta a frequência relativa com que cada eletrodo aparece
     entre as top-k features selecionadas nos folds de CV.
@@ -95,9 +72,30 @@ def create_info():
     return info
 
 
-def plot_topographic():
+def plot_topographic(
+        k_features = [20, 40, 60, 80, 100],     
+        experiment_name = "experiment_base"
+):
+
+    base_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "run_stage_90_in_loop"
+        / experiment_name
+    )
+
+    output_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "generate_topographic_plot"
+        / experiment_name
+    )
 
     output_path.mkdir(parents=True, exist_ok=True)
+
+    k_features_list = list(k_features)
 
     info = create_info()
 
@@ -110,7 +108,7 @@ def plot_topographic():
     all_frequencies = []
 
     for k in k_features_list:
-        freq = compute_electrode_frequency(k)
+        freq = compute_electrode_frequency(k, base_path)
         all_frequencies.append(freq)
 
     all_frequencies = np.array(all_frequencies)

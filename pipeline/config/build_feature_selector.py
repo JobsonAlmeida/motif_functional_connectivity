@@ -4,7 +4,15 @@ from sklearn.feature_selection import SequentialFeatureSelector
 
 def build_feature_selector(feature_selector, k_features):
 
-    if feature_selector == "f_classif":
+    if feature_selector == "none":
+
+        selector = None
+
+        selector_config = {
+            "type": "None"
+        }
+
+    elif feature_selector == "f_classif":
 
         selector = SelectKBest(
             score_func=f_classif,

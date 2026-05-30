@@ -9,47 +9,47 @@ import pickle
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-experiment_name = "experiment_1"
-
-base_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "run_stage_90_in_loop"
-    / experiment_name
-)
-
-output_path = (
-    project_root
-    / "results"
-    / current_file.parents[0].name
-    / "generate_frequencies_across_k"
-    / experiment_name
-)
-
-os.makedirs(output_path, exist_ok=True)
-
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
-
-bands = [
-    (12, 15),
-    (15, 18),
-    (18, 21),
-    (21, 24),
-    (24, 27),
-    (27, 30),
-    (30, 33),
-    (33, 36),
-    (36, 39),
-    (39, 42),
-    (42, 45),
-]
-
-k_values = [20, 40, 60, 80, 100]
 
 max_type_name = "max_1_2_3"   # lags = [1, 2, 3]
 
-def plot_band_contributions_across_k():
+def plot_band_contributions_across_k(
+        k_values = [20, 30, 40, 50, 60, 70, 80, 90, 100],
+        bands = [
+            (12, 15),
+            (15, 18),
+            (18, 21),
+            (21, 24),
+            (24, 27),
+            (27, 30),
+            (30, 33),
+            (33, 36),
+            (36, 39),
+            (39, 42),
+            (42, 45),
+        ],
+        experiment_name = "experiment_base"):
+
+    base_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "run_stage_90_in_loop"
+        / experiment_name
+    )
+
+    output_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "generate_band_contributions_across_k"
+        / experiment_name
+    )
+
+    os.makedirs(output_path, exist_ok=True)
+
+    k_values = list(k_values)
+
 
     band_contribution_results = {}
 
@@ -72,7 +72,7 @@ def plot_band_contributions_across_k():
 
             for fold_features in selected_features:
                 for feature in fold_features:
-                    band_idx = feature["band"]
+                    band_idx = feature["band_index"]
 
                     band_counts[band_idx] += 1
 
