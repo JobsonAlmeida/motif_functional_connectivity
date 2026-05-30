@@ -9,18 +9,39 @@ import matplotlib.pyplot as plt
 current_file = Path(__file__).resolve()
 project_root = current_file.parents[2]
 
-base_path = project_root / "processed_data" / "stage_90_maximum_matrix_based_SVM"
+# base_path = project_root / "processed_data" / "stage_90_maximum_matrix_based_SVM"
 
-result_name = "confusion_maximum_matrices"
-output_path = project_root / "results" / current_file.parents[0].name / result_name
+#result_name = "confusion_maximum_matrices"
+# output_path = project_root / "results" / current_file.parents[0].name / result_name
 
-os.makedirs(output_path, exist_ok=True)
 
 subjects = [f"sub-{i:02d}" for i in range(1, 11)]
 sessions = [f"ses-{i:02d}" for i in range(1, 4)]
 
 
-def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
+def run_generate_confusion_matrix_for_maximum_matrix(
+        k_feature = 3 ,
+        experiment_name = "experiment_base", 
+    ):
+
+    base_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "run_stage_90_in_loop"
+        / experiment_name
+
+    )    
+
+    output_path = (
+        project_root
+        / "results"
+        / current_file.parents[0].name
+        / "confusion_maximum_matrices"
+        /experiment_name
+    )
+
+    os.makedirs(output_path, exist_ok=True)
 
     class_names = ["up", "down", "left", "right"]
 
@@ -33,7 +54,7 @@ def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
 
             file_path = os.path.join(
                 base_path,
-                f"{subject}_maximum_matrices_svm_results.pkl"
+                f"{subject}_maximum_matrices_svm_results_k_{k_feature}.pkl"
             )
 
             with open(file_path, "rb") as f:
@@ -77,7 +98,8 @@ def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
                     )
 
         fig.suptitle(
-            f"Normalized mean confusion matrices | {max_type_name}",
+            f"Normalized mean confusion matrices | {max_type_name}"
+            f"\nk feature = {k_feature}",            
             fontsize=14
         )
 
@@ -88,7 +110,7 @@ def run_generate_confusion_matrix_for_maximum_matrix(output_path = output_path):
 
         save_path = os.path.join(
             output_path,
-            f"figure_confusion_matrices_{max_type_name}.png"
+            f"figure_confusion_matrices_{max_type_name}_k_{k_feature}.png"
         )
 
         plt.savefig(save_path, dpi=300, bbox_inches="tight")

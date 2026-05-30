@@ -51,7 +51,7 @@ def run_generate_accuracy_table():
 
         file_path_max_matrices = os.path.join(
             base_path_maximum_matrix,
-            f"{subject}_maximum_matrices_svm_results.pkl"
+            f"{subject}_maximum_matrices_svm_results_k_2816.pkl"
         )
 
         if not os.path.exists(file_path_max_matrices):
