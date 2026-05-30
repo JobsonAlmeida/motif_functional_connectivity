@@ -44,7 +44,6 @@ def load_results_across_k(k_features, base_path):
 
 
 def plot_accuracy_across_k(results_across_k, k_features, output_path):
-
     for max_type in max_type_names:
 
         plt.figure(figsize=(12, 6))
@@ -77,42 +76,18 @@ def plot_accuracy_across_k(results_across_k, k_features, output_path):
         print(f"Imagem salva em: {save_path}")
 
 
-def plot_top_n_accuracies(results_across_k, k_features, output_path, top_n = 3):
+def obtain_top_n_accuracies_by_subject_and_k():
+    None
 
-    top_results = {}
+def plot_top_n_accuracies():
 
-    for max_type in max_type_names:
+   with open(json_path, "r") as f:
+        top_results = json.load(f)
 
-        top_results[max_type] = {}
-
-        for subject in subjects:
-            mean_accuracies = results_across_k[max_type][subject]
-
-            if len(mean_accuracies) != len(k_features):
-                continue
-
-            mean_accuracies = np.array(mean_accuracies)
-
-            top_indices = np.argsort(mean_accuracies)[-top_n:][::-1]
-
-            top_results[max_type][subject] = [
-
-                {
-                    "rank": rank + 1,
-                    "k_feature": int(k_features[index]),
-                    "mean_accuracy": float(mean_accuracies[index])
-
-                }
-
-                for rank, index in enumerate(top_indices)
-
-            ]
-
-    #plotando o grafico top n
     for max_type_name, subjects_data in top_results.items():
 
-        subjects_names = list(subjects_data.keys())
-        x = np.arange(len(subjects_names))
+        subjects = list(subjects_data.keys())
+        x = np.arange(len(subjects))
 
         width = 0.8 / top_n
 
@@ -123,12 +98,12 @@ def plot_top_n_accuracies(results_across_k, k_features, output_path, top_n = 3):
             accuracies = []
             k_values = []
 
-            for subject in subjects_names:
+            for subject in subjects:
 
                 top_item = subjects_data[subject][rank]
 
                 accuracies.append(top_item["mean_accuracy"])
-                k_values.append(top_item["k_feature"])
+                k_values.append(top_item["k_features"])
 
             bars = plt.bar(
                 x + rank * width,
@@ -165,17 +140,19 @@ def plot_top_n_accuracies(results_across_k, k_features, output_path, top_n = 3):
 
         save_path = (
             output_path
+            / experiment_name
             / f"{max_type_name}_top_{top_n}_accuracies_with_k.png"
         )
 
         plt.savefig(save_path, dpi=300)
         plt.close()
 
-        print(f"Imagem salva em: {save_path}")   
+        print(f"Imagem salva em: {save_path}")
+    
 
 
-def generate_accuracy_accross_k_plot(
-        k_features = [20, 40, 60, 80, 100],
+
+def generate_top_n_accuracies_plot(
         experiment_name = "experiment_base",
         top_n = 3
 ):
@@ -197,15 +174,13 @@ def generate_accuracy_accross_k_plot(
         /experiment_name
     )
 
-    k_features = list(k_features)
-
     os.makedirs(output_path, exist_ok=True)
 
-    results_across_k = load_results_across_k(k_features, base_path)
-    plot_accuracy_across_k(results_across_k, k_features, output_path)       
-    plot_top_n_accuracies(results_across_k, k_features, output_path, top_n = top_n)
+    top_n_accuracies_by_subjetc_and_k = obtain_top_n_accuracies_by_subject_and_k(top_n, base_path)
+
+    plot_top_n_accuracies(top_n_accuracies_by_subjetc_and_k, output_path)
 
 
 if __name__ == "__main__":
 
-    generate_accuracy_accross_k_plot()
+    generate_top_n_accuracies_plot()

@@ -81,7 +81,7 @@ def main():
     #     experiment_name="experiment_1", 
     # )
 
-    generate_accuracy_accross_k_plot(k_features= range(1, 11), experiment_name="experiment_1")
+    generate_accuracy_accross_k_plot(k_features= range(1, 11), experiment_name="experiment_1", top_n=3)
 
     #plot_topographic()
 
