@@ -65,7 +65,7 @@ def plot_accuracy_across_k(results_across_k, k_features, output_path):
         plt.title(f"Mean SVM Accuracy across k_features - {max_type}")
         plt.xlabel("k_features")
         plt.ylabel("Mean accuracy")
-        plt.xticks(k_features)
+        #plt.xticks(k_features)
         plt.grid(True, alpha=0.3)
         plt.legend(title="Subject", bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.tight_layout()
