@@ -79,17 +79,17 @@ def main():
 
     #run_maximum_matrix_based_SVM(feature_selector = "f_classif", k_features= 2816)
 
-    # run_stage_90_in_loop(
-    #     feature_selector = "f_classif",
-    #     k_features= range(1, 11),
-    #     experiment_name="experiment_1", 
-    # )
+    run_stage_90_in_loop(
+        feature_selector = "f_classif",
+        k_features= range(1, 2817),
+        experiment_name="experiment_1", 
+    )
 
     #generate_accuracy_accross_k_plot(k_features= range(1, 11), experiment_name="experiment_1", top_n=3)
 
     #plot_topographic()
 
-    plot_band_contributions_across_k(experiment_name = "experiment_1", k_values=range(1,11))
+    #plot_band_contributions_across_k(experiment_name = "experiment_1", k_values=range(1,11))
 
     #generate_accuracy_accross_k_plot()
     
