@@ -25,7 +25,7 @@ def build_feature_selector(feature_selector, k_features):
             "k": k_features
         }
 
-    elif feature_selector == "mutual_info":
+    elif feature_selector == "mutual_info_classif":
 
         selector = SelectKBest(
             score_func=mutual_info_classif,

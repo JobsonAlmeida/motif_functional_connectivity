@@ -81,7 +81,7 @@ def run_motif_sequence():
 
             """___Processando os dados___"""
         
-            X_bands_motifs = obtain_motif_sequences(X_bands)
+            X_bands_motifs = obtain_motif_sequences(X_bands) #(épocas × bandas × canais × motifs)
 
             if X_bands_motifs.shape[0] != labels.shape[0]:
                 raise ValueError(

@@ -155,19 +155,12 @@ def run_maximum_matrix_based_SVM(
 
                 #salvando as features utilizadas
 
+                selector = model.named_steps["selector"]
 
-                if "selector" in model.named_steps:
+                selected_features = np.where(
+                    selector.get_support()
+                )[0]
 
-                    selector = model.named_steps["selector"]
-
-                    selected_features = np.where(
-                        selector.get_support()
-                    )[0]                
-
-                else: 
-
-                    selected_features_all_folds = "all_features"
- 
                 n_bands = X_original.shape[1]
                 n_channels = X_original.shape[2]
                 n_measures = X_original.shape[3]

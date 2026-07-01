@@ -12,7 +12,7 @@ from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM import 
 
 from pipeline.stage_100_generate_results.run_stage_90_in_loop import run_stage_90_in_loop
 from pipeline.stage_100_generate_results.generate_accuracy_table import run_generate_accuracy_table
-from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
+# from pipeline.stage_100_generate_results.generate_confusion_matrix_for_maximum_matrix import run_generate_confusion_matrix_for_maximum_matrix
 # # from pipeline.stage_100_generate_results.run_stage_90 import run_stage_90
 # # from pipeline.stage_100_generate_results.run_stage_90_1 import run_stage_90_1
 # # from pipeline.stage_100_generate_results.run_stage_90_v2_experiments import run_stage_90_v2_experiments
@@ -20,7 +20,8 @@ from pipeline.stage_100_generate_results.generate_topographic_plot import plot_t
 from pipeline.stage_100_generate_results.generate_band_contributions_across_k import plot_band_contributions_across_k
 from pipeline.stage_100_generate_results.generate_accuracy_accross_k_plot import generate_accuracy_accross_k_plot
 from pipeline.stage_100_generate_results.generate_per_subject_band_wise_effect import run_generate_per_subject_band_wise_effect
-
+from pipeline.stage_90_maximum_matrix_based_SVM.maximum_matrix_based_SVM_original_flow import run_maximum_matrix_based_SVM_original_flow
+from pipeline.stage_100_generate_results_original_flow.generate_confusion_matrix_for_maximum_matrix_original_flow import run_generate_confusion_matrix_for_maximum_matrix_original_flow
 from pipeline.config.specific_group_channels import only_channels_D
 
 from pathlib import Path
@@ -49,7 +50,7 @@ def main():
 
     #run_generate_per_subject_band_wise_effect()
 
-    #run_generate_confusion_matrix_for_maximum_matrix(k_feature=4, experiment_name= "experiment_1")
+    #run_generate_confusion_matrix_for_maximum_matrix(k_feature=14, experiment_name= "experiment_3")
     #plot_topographic(k_features=[3,4,5,6], experiment_name="experiment_1")
 
     #run_maximum_matrix()
@@ -81,17 +82,22 @@ def main():
 
     # run_stage_90_in_loop(
     #     feature_selector = "f_classif",
-    #     k_features= range(1, 2817),
-    #     experiment_name="experiment_1", 
+    #     k_features= range(14,15),
+    #     experiment_name="experiment_3", 
     # )
 
-    generate_accuracy_accross_k_plot(k_features= range(1, 2817), experiment_name="experiment_1", top_n=3)
+    #generate_accuracy_accross_k_plot(k_features= range(1, 2817), experiment_name="experiment_1", top_n=3)
 
     #plot_topographic()
 
     #plot_band_contributions_across_k(experiment_name = "experiment_1", k_values=range(1,11))
 
     #generate_accuracy_accross_k_plot()
+
+    #run_maximum_matrix_based_SVM_original_flow()
+
+    run_generate_confusion_matrix_for_maximum_matrix_original_flow()
+
     
    
 

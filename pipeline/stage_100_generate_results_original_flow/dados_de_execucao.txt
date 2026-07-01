@@ -1,0 +1,59 @@
+sub-01 
+Shape dos dados: (200, 11, 2, 128, 2) 
+Shape dos rótulos: (200,)
+sub-01 max_0_1_2_3 best k: 5 best mean accuracy: 0.37
+sub-01 max_1_2_3 best k: 5 best mean accuracy: 0.41500000000000004
+
+sub-02 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-02 max_0_1_2_3 best k: 59 best mean accuracy: 0.4166666666666667
+sub-02 max_1_2_3 best k: 93 best mean accuracy: 0.4583333333333333
+
+sub-03 
+Shape dos dados: (180, 11, 2, 128, 2) 
+Shape dos rótulos: (180,)
+sub-03 max_0_1_2_3 best k: 8 best mean accuracy: 0.4333333333333334
+sub-03 max_1_2_3 best k: 1 best mean accuracy: 0.3666666666666667
+
+sub-04 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-04 max_0_1_2_3 best k: 5 best mean accuracy: 0.37916666666666665
+sub-04 max_1_2_3 best k: 19 best mean accuracy: 0.4333333333333334
+
+sub-05 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-05 max_0_1_2_3 best k: 1 best mean accuracy: 0.3833333333333334
+sub-05 max_1_2_3 best k: 66 best mean accuracy: 0.36666666666666664
+
+sub-06 
+Shape dos dados: (216, 11, 2, 128, 2) 
+Shape dos rótulos: (216,)
+sub-06 max_0_1_2_3 best k: 21 best mean accuracy: 0.421247357293869
+sub-06 max_1_2_3 best k: 181 best mean accuracy: 0.44027484143763207
+
+sub-07 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-07 max_0_1_2_3 best k: 38 best mean accuracy: 0.38333333333333336
+sub-07 max_1_2_3 best k: 14 best mean accuracy: 0.38333333333333336
+
+sub-08 
+Shape dos dados: (200, 11, 2, 128, 2) 
+Shape dos rótulos: (200,)
+sub-08 max_0_1_2_3 best k: 147 best mean accuracy: 0.45
+sub-08 max_1_2_3 best k: 72 best mean accuracy: 0.44000000000000006
+
+sub-09 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-09 max_0_1_2_3 best k: 35 best mean accuracy: 0.38749999999999996
+sub-09 max_1_2_3 best k: 309 best mean accuracy: 0.3958333333333333
+
+sub-10 
+Shape dos dados: (240, 11, 2, 128, 2) 
+Shape dos rótulos: (240,)
+sub-10 max_0_1_2_3 best k: 131 best mean accuracy: 0.4
+sub-10 max_1_2_3 best k: 45 best mean accuracy: 0.35833333333333334
