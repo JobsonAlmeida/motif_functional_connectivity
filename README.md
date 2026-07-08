@@ -8,7 +8,7 @@ The original paper is available at:
 https://iopscience.iop.org/article/10.1088/2057-1976/ae451b/meta
 
 For convenience, a local copy of the paper is also included in this repository:
-[Decoding Inner Speech with Functional Connectivity (PDF)](./docs/Data_Set_Thinking_Out_Loud.pdf)
+[Decoding Inner Speech with Functional Connectivity (PDF)](./docs/Decoding_inner_speech_with_functional_connectivity.pdf)
 
 ![Motif Image](./pipeline/stage_30_motif_sequence/diagrams/motif_image.png)
 
