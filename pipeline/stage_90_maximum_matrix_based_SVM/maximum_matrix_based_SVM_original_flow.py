@@ -106,7 +106,6 @@ def run_maximum_matrix_based_SVM_original_flow(
             label_sessions.append(labels)
 
             
-
         # Unindo as 3 sessões do sujeito
 
         if len(graph_sessions) != len(sessions):

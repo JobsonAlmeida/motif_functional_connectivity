@@ -50,8 +50,17 @@ def obtain_synchronization_matrices(array: np.ndarray) -> np.ndarray:
         #np sum faz a soma dos elementos ao longo do último eixo do array e elimina essa dimensão por padrão.
         sync = matches.sum(axis=-1) #sync.shape = (n_epochs, n_bands, n_channels, n_channels)
 
-        # Normaliza pelo valor máximo presente em cada matriz
-        sync = (sync - sync.min()) / (sync.max() - sync.min())
+        # Aplica normalização min-max independentemente para cada matriz de sincronização.
+        # Normaliza para o range [0, 1]
+        min_val = sync.min(axis=(-2, -1), keepdims=True)
+        max_val = sync.max(axis=(-2, -1), keepdims=True)
+
+        # Evita divisão por zero caso todos os valores da matriz sejam iguais.
+        range_val = max_val - min_val
+        range_val[range_val == 0] = 1
+
+        # fazendo a normalização efetivamente
+        sync = (sync - min_val) / range_val
 
         sync_matrices[:, :, lag, :, :] = sync #sync_matrices.shape = (n_epochs, n_bands, n_lag, n_channels, n_channels)
 
