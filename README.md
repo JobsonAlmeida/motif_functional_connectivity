@@ -25,6 +25,8 @@ This project was developed through a partnership between the **School of Electri
 
 ## Installation
 
+### Option 1 – Using Conda
+
 Create the Conda environment:
 
 ```bash
@@ -36,3 +38,33 @@ Activate the environment:
 ```bash
 conda activate motif_env
 ```
+
+### Option 2 – Using a Python virtual environment
+
+Create a virtual environment:
+
+```bash
+python -m venv .motif_env
+```
+
+Activate the virtual environment.
+
+### Linux / macOS
+
+```bash
+source .motif_env/bin/activate
+```
+
+### Windows
+
+```bash
+.motif_env\Scripts\activate
+```
+
+Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+
