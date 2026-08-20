@@ -186,7 +186,7 @@ def run_maximum_matrix_based_SVM(
                         "band_index": int(band_idx),
                         "channel_index": int(channel_idx),
                         "channel_name": INDICES_CHANNELS_MAPPING[channel_idx],
-                        "measure": int(measure_idx)
+                        "measure_index": int(measure_idx)
                     })
 
                 selected_features_all_folds.append(feature_info)
